@@ -7,7 +7,7 @@ Note:
 a) When the word 'specific' is used, pick one record (of the appropriate type, recipe, meal, etc.) for the query. The way the website works is that a list of items are displayed and then the user picks one and navigates to the "details" page.
 b) Whenever you have a record for a specific item include the name of the picture for that item. That is because the website will always show a picture of the item.
 */
-use HearthyHearthDB 
+use RecipeDB 
 go
 
 --One resultset with number of recipes, meals, and cookbooks

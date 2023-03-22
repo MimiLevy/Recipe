@@ -1,6 +1,6 @@
 use master
 go 
-drop database if exists HearthyHearthDB 
+drop database if exists RecipeDB 
 go
-create database HearthyHearthDB 
+create database RecipeDB 
 go 

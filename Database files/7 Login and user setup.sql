@@ -2,7 +2,7 @@
 --IMPORTANT create login in master
 create login //losinname// with password = '//password//'
 
---create user in HearthyHearthDB 
+--create user in RecipeDB 
 create user cpu_staff_user from login //loginname//
 
 alter role db_datareader add member cpu_staff_user 

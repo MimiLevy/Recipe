@@ -1,5 +1,5 @@
 --AS WOW!! 100%
-use HearthyHearthDB
+use RecipeDB
 go 
 
 drop table if exists CookbookRecipe
