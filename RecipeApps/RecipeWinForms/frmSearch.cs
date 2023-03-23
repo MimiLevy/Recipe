@@ -15,10 +15,9 @@ namespace RecipeWinForms
             WindowsFormsUtility.FormatGridForSearchResults(gRecipe);
         }
 
-
         private void SearchForRecipe(string recipename)
         {
-            string sql = "select r.RecipeId, r.RecipeName  from Recipe r where r.recipename like '%" + recipename + "%'";
+            string sql = "select r.RecipeId, r.RecipeName from Recipe r where r.recipename like '%" + recipename + "%'";
             DataTable dt = SQLUtility.GetDataTable(sql);
             gRecipe.DataSource = dt;
             gRecipe.Columns["RecipeId"].Visible = false;
@@ -26,7 +25,11 @@ namespace RecipeWinForms
 
         private void ShowRecipeForm(int rowindex)
         {
-            int id = (int)gRecipe.Rows[rowindex].Cells["RecipeId"].Value;
+            int id = 0;
+            if (rowindex > -1)
+            {
+                id = (int)gRecipe.Rows[rowindex].Cells["RecipeId"].Value;
+            }
             frmRecipe frm = new();
             frm.ShowForm(id);
         }
@@ -35,16 +38,15 @@ namespace RecipeWinForms
         {
             ShowRecipeForm(e.RowIndex);
         }
+
         private void BtnNew_Click(object? sender, EventArgs e)
         {
-
+            ShowRecipeForm( -1);
         }
 
         private void BtnSearch_Click(object? sender, EventArgs e)
         {
             SearchForRecipe(txtRecipeName.Text);
         }
-
-
     }
 }
