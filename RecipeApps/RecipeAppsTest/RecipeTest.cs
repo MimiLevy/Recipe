@@ -18,6 +18,7 @@ namespace RecipeAppsTest
         {
             DataTable dt = SQLUtility.GetDataTable("select * from recipe where recipeid = 0");
             DataRow r = dt.Rows.Add();
+            //AF Whenever using Assume, it's good to add a message shown if it comes out to false, so that the user knows what went wrong
             Assume.That(dt.Rows.Count == 1);
 
             int staffid = SQLUtility.GetFirstColumnFirstRowValue("select top 1 staffid from staff");
@@ -91,11 +92,13 @@ namespace RecipeAppsTest
             TestContext.WriteLine("Loaded recipe = " + loadedid);
         }
 
+        //AF NIce idea to use the test case in this way
         [Test]
         [TestCase("staff")]
         [TestCase("cuisinetype")]
         public void GetList(string tablename)
         {
+            //AF TotalStaffCount is not an accurate name in this select statement, as this test can be used to get a list from any table
             int listrecordscount = SQLUtility.GetFirstColumnFirstRowValue("select TotalStaffCount = count(*) from " + tablename);
             Assume.That(listrecordscount > 0, "No records in the list, can't test");
             TestContext.WriteLine("Num of list records in DB  = " + listrecordscount);
