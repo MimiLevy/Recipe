@@ -12,7 +12,6 @@ namespace RecipeAppsTest
         }
 
 
-
         [Test]
         public void InsertNewRecipe()
         {
@@ -40,8 +39,6 @@ namespace RecipeAppsTest
             int newrecipeid = SQLUtility.GetFirstColumnFirstRowValue("select recipeid from recipe where recipename =  '" + recipename + "'");
             Assert.IsTrue(newrecipeid > 0, "Recipe (" + recipename + ") is not found in DB");
             TestContext.WriteLine("Recipe (" + recipename + ") was found in DB with pk = " + newrecipeid);
-
-
         }
 
         [Test]
@@ -63,7 +60,6 @@ namespace RecipeAppsTest
         }
 
         [Test]
-
         public void DeleteRecipe()
         {
             InsertNewRecipe();
@@ -78,6 +74,7 @@ namespace RecipeAppsTest
             Assert.IsTrue(dtafterdelete.Rows.Count == 0, "Recipe with id = " + recipeid + " exists in DB");
             TestContext.WriteLine("Recipe with id = " + recipeid + " does not exist in DB");
         }
+
         [Test]
         public void LoadRecipe()
         {
@@ -90,6 +87,22 @@ namespace RecipeAppsTest
             int loadedid = (int)dt.Rows[0]["RecipeId"];
             Assert.IsTrue(loadedid == recipeid, loadedid + " <> " + recipeid);
             TestContext.WriteLine("Loaded recipe = " + loadedid);
+        }
+
+        [Test]
+        public void SearchRecipe()
+        {
+            string criteria = "d";
+            int num = SQLUtility.GetFirstColumnFirstRowValue("select Total = count(*) from Recipe where RecipeName like '%" + criteria + "%'");
+            Assume.That(num > 0, "There are no recipes that match the search for " + criteria);
+            TestContext.WriteLine("There are " + num + " recipes that match " + criteria);
+            TestContext.WriteLine("Ensure  that recipe search returns " + num + " rows");
+
+            DataTable dt = Recipe.SearchForRecipes(criteria);
+            int results = dt.Rows.Count;
+
+            Assert.IsTrue(results == num, "Results of recipe search does not match number of recipes, " + results + " <> " + num);
+            TestContext.WriteLine("Number of rows returnd by recipe search is " + results);
         }
 
         //AF NIce idea to use the test case in this way

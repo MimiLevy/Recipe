@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Data.SqlClient;
 
 namespace RecipeAppsSystem
 {
@@ -6,20 +7,34 @@ namespace RecipeAppsSystem
     {
         public static DataTable SearchForRecipes(string recipename)
         {
-            string sql = "select r.RecipeId, r.RecipeName from Recipe r where r.recipename like '%" + recipename + "%'";
-            DataTable dt = SQLUtility.GetDataTable(sql);
+            DataTable dt = new();
+            SqlCommand cmd = SQLUtility.GetSqlCommand("RecipeGet");
+            if(recipename == "")
+            {
+                cmd.Parameters["@All"].Value = 1;
+            }
+            cmd.Parameters["@RecipeName"].Value = recipename;
+            dt = SQLUtility.GetDataTable(cmd);
             return dt;
         }
 
         public static DataTable Load(int recipeid)
         {
-            string sql = "select s.UserName, ct.CuisineTypeDesc, r.* from Recipe r join Staff s on r.StaffId = s.StaffId join CuisineType ct on r.CuisineTypeId = ct.cuisineTypeId where r.RecipeId = " + recipeid.ToString();
-            return SQLUtility.GetDataTable(sql);
+            DataTable dt = new();
+            SqlCommand cmd = SQLUtility.GetSqlCommand("RecipeGet");
+            cmd.Parameters["@RecipeId"].Value = recipeid;
+            dt = SQLUtility.GetDataTable(cmd);
+            return dt;
         }
+
 
         public static DataTable GetList(string tablename)
         {
-            return SQLUtility.GetDataTable("select * from " + tablename);
+            DataTable dt = new();
+            SqlCommand cmd = SQLUtility.GetSqlCommand(tablename + "Get");
+            cmd.Parameters["@All"].Value = 1;
+            dt = SQLUtility.GetDataTable(cmd);
+            return dt;
         }
          public static void Save(DataTable dtRecipe)
         {

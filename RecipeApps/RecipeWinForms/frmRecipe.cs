@@ -22,7 +22,7 @@ namespace RecipeWinForms
             {
                 dtRecipe.Rows.Add();
             }
-            DataTable dtUserName = Recipe.GetList("staff");
+            DataTable dtUserName = Recipe.GetList("Staff");
             DataTable dtCuisineType = Recipe.GetList("CuisineType");
             WindowsFormsUtility.SetLIstBinding(lstUserName,dtUserName, dtRecipe, "Staff");
             WindowsFormsUtility.SetLIstBinding(lstCuisineTypeDesc, dtCuisineType, dtRecipe, "CuisineType");
