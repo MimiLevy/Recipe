@@ -17,7 +17,6 @@ namespace RecipeAppsTest
         {
             DataTable dt = SQLUtility.GetDataTable("select * from recipe where recipeid = 0");
             DataRow r = dt.Rows.Add();
-            //AF Whenever using Assume, it's good to add a message shown if it comes out to false, so that the user knows what went wrong
             Assume.That(dt.Rows.Count == 1, "Datatable has more or less than 1 row");
 
             int staffid = SQLUtility.GetFirstColumnFirstRowValue("select top 1 staffid from staff");
@@ -60,6 +59,36 @@ namespace RecipeAppsTest
         }
 
         [Test]
+        public void ChangeExistingRecipesCaloriesToInvalidNumber()
+        {
+            int recipeid = GetExistingRecipeId();
+            Assume.That(recipeid > 0, "No recipes in DB, can't test");
+            int calories = SQLUtility.GetFirstColumnFirstRowValue("select calories from recipe where recipeid = " + recipeid);
+            TestContext.WriteLine("Recipe with id = " + recipeid + " has " + calories + " calories");
+            calories = 0;
+            TestContext.WriteLine("Change calories to " + calories);
+
+            DataTable dt = Recipe.Load(recipeid);
+            dt.Rows[0]["calories"] = calories;
+            Exception ex = Assert.Throws<Exception>(() => Recipe.Save(dt));
+            TestContext.WriteLine(ex.Message);
+        }
+
+        [Test]
+        public void ChangeExistingRecipesNameToInvalidName()
+        {
+            int recipeid = GetExistingRecipeId();
+            Assume.That(recipeid > 0, "No recipes in DB, can't test");
+            string recipename = GetFirstCoulmnFirstRowValueAsString("select recipename from recipe where recipeid <> " + recipeid);
+            string currentrecipename = GetFirstCoulmnFirstRowValueAsString("select recipename from recipe where recipeid = " + recipeid);
+            TestContext.WriteLine("Change recipe name from " + currentrecipename + " to different recipe name - " + recipename);
+            DataTable dt = Recipe.Load(recipeid);
+            dt.Rows[0]["recipename"] = recipename;
+            Exception ex = Assert.Throws<Exception>(() => Recipe.Save(dt));
+            TestContext.WriteLine(ex.Message);
+        }
+
+        [Test]
         public void DeleteRecipe()
         {
             InsertNewRecipe();
@@ -73,6 +102,19 @@ namespace RecipeAppsTest
             DataTable dtafterdelete = SQLUtility.GetDataTable("select * from recipe where recipeid = " + recipeid);
             Assert.IsTrue(dtafterdelete.Rows.Count == 0, "Recipe with id = " + recipeid + " exists in DB");
             TestContext.WriteLine("Recipe with id = " + recipeid + " does not exist in DB");
+        }
+
+        [Test]
+        public void DeleteRecipeWithIngredients()
+        {
+            DataTable dt = SQLUtility.GetDataTable("select top 1 * from recipe order by recipeid");
+            int recipeid = (int)dt.Rows[0]["recipeid"];
+            Assume.That(recipeid > 0, "No recipes with ingredients, can't test");
+            TestContext.WriteLine("Existing recipe with ingredients, with id = " + recipeid);
+            TestContext.WriteLine("Ensure that app cannot delete recipe with id = " + recipeid);
+
+            Exception ex = Assert.Throws<Exception>(() => Recipe.Delete(dt));
+            TestContext.WriteLine(ex.Message);
         }
 
         [Test]
@@ -105,13 +147,14 @@ namespace RecipeAppsTest
             TestContext.WriteLine("Number of rows returnd by recipe search is " + results);
         }
 
-        //AF NIce idea to use the test case in this way
+
+
         [Test]
         [TestCase("staff")]
         [TestCase("cuisinetype")]
         public void GetList(string tablename)
         {
-            //AF TotalStaffCount is not an accurate name in this select statement, as this test can be used to get a list from any table
+
             int listrecordscount = SQLUtility.GetFirstColumnFirstRowValue("select TotalCount = count(*) from " + tablename);
             Assume.That(listrecordscount > 0, "No records in the list, can't test");
             TestContext.WriteLine("Num of list records in DB  = " + listrecordscount);
@@ -122,6 +165,20 @@ namespace RecipeAppsTest
             Assert.IsTrue(dt.Rows.Count == listrecordscount, "Num rows returned by app (" + dt.Rows.Count + " <> " + listrecordscount);
 
             TestContext.WriteLine("Num of rows returned by app = " + dt.Rows.Count);
+        }
+
+        private string GetFirstCoulmnFirstRowValueAsString(string sql)
+        {
+            string s = "";
+            DataTable dt = SQLUtility.GetDataTable(sql);
+            if (dt.Rows.Count > 0 && dt.Columns.Count > 0)
+            {
+                if (dt.Rows[0][0] != DBNull.Value)
+                {
+                    s = dt.Rows[0][0].ToString();
+                }
+            }
+            return s;
         }
         private int GetExistingRecipeId()
         {

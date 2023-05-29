@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\CPUWindowsFormsFrameWork\CPUWindowsFormsFrameWork.csproj" />
     <ProjectReference Include="..\RecipeAppsSystem\RecipeAppsSystem.csproj" />
+    <ProjectReference Include="..\RecipeAppsTest\RecipeAppsTest.csproj" />
   </ItemGroup>
 
 </Project>
