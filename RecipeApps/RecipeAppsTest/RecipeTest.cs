@@ -79,8 +79,8 @@ namespace RecipeAppsTest
         {
             int recipeid = GetExistingRecipeId();
             Assume.That(recipeid > 0, "No recipes in DB, can't test");
-            string recipename = GetFirstCoulmnFirstRowValueAsString("select recipename from recipe where recipeid <> " + recipeid);
-            string currentrecipename = GetFirstCoulmnFirstRowValueAsString("select recipename from recipe where recipeid = " + recipeid);
+            string recipename = GetFirstColumnFirstRowValueAsString("select recipename from recipe where recipeid <> " + recipeid);
+            string currentrecipename = GetFirstColumnFirstRowValueAsString("select recipename from recipe where recipeid = " + recipeid);
             TestContext.WriteLine("Change recipe name from " + currentrecipename + " to different recipe name - " + recipename);
             DataTable dt = Recipe.Load(recipeid);
             dt.Rows[0]["recipename"] = recipename;
@@ -167,7 +167,7 @@ namespace RecipeAppsTest
             TestContext.WriteLine("Num of rows returned by app = " + dt.Rows.Count);
         }
 
-        private string GetFirstCoulmnFirstRowValueAsString(string sql)
+        private string GetFirstColumnFirstRowValueAsString(string sql)
         {
             string s = "";
             DataTable dt = SQLUtility.GetDataTable(sql);
