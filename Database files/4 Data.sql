@@ -352,10 +352,9 @@ go
 
 ;
 with x as(
-   select CookbookName = 'Treats for two', RecipeName = 'Chocolate Chip Cookies', CookbookRecipeSequence = 1 
-   union select 'Treats for two', 'Apple Yogurt Smoothie', 2
-   union select 'Treats for two', 'Cheese Bread', 3
-   union select 'Treats for two', 'Butter Muffins', 4
+   select CookbookName = 'Treats for two', RecipeName = 'Apple Yogurt Smoothie', CookbookRecipeSequence = 1 
+   union select 'Treats for two', 'Cheese Bread', 2
+   union select 'Treats for two', 'Butter Muffins', 3
    union select 'GoodFood', 'Vegetable Soup', 1
    union select 'GoodFood', 'Tasty topped BBQ Burgers', 2 
    union select 'GoodFood', 'Teriyaki Schnitzle', 3 
