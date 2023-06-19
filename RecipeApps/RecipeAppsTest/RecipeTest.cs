@@ -116,6 +116,34 @@ namespace RecipeAppsTest
             Exception ex = Assert.Throws<Exception>(() => Recipe.Delete(dt));
             TestContext.WriteLine(ex.Message);
         }
+        [Test]
+        public void DeletePublishedRecipeWithIngredients()
+        {
+            string sql = @"
+select top 1 @recipeid = r.recipeid
+from Recipe r
+join RecipeIngredient ri
+on ri.RecipeId = r.RecipeId
+join RecipeDirection rd 
+on rd.RecipeId = r.RecipeId
+left join mealcourserecipe mcr
+on mcr.RecipeId = r.RecipeId
+left join CookbookRecipe cr 
+on cr.recipeid = r.recipeid
+where mcr.RecipeId is null
+and cr.RecipeId is null
+and r.RecipeStatus = 'published'
+order by r.RecipeId desc
+";
+            DataTable dt = SQLUtility.GetDataTable("select top 1 * from recipe order by recipeid");
+            int recipeid = (int)dt.Rows[0]["recipeid"];
+            Assume.That(recipeid > 0, "No published recipes with ingredients, can't test");
+            TestContext.WriteLine("Existing published recipe with ingredients, with id = " + recipeid);
+            TestContext.WriteLine("Ensure that app cannot delete recipe with id = " + recipeid);
+
+            Exception ex = Assert.Throws<Exception>(() => Recipe.Delete(dt));
+            TestContext.WriteLine(ex.Message);
+        }
 
         [Test]
         public void LoadRecipe()

@@ -320,7 +320,7 @@ with x as(
    union select 'BBQ Supper', 'Appetizer', 'Cold Orange Juice Drink', 1
    union select 'Good Easy Supper', 'Main', 'Teriyaki Schnitzle', 1
    union select 'Good Easy Supper', 'Main', 'Baked rice', 0
-   union select 'Good Easy Supper', 'Soup', 'Vegetable soup', 1
+   --union select 'Good Easy Supper', 'Soup', 'Vegetable soup', 1
 )
 insert MealCourseRecipe(MealCourseId,RecipeId,MainDish)
 select mc.MealCourseId, r.RecipeId, x.MainDish 
@@ -355,9 +355,9 @@ with x as(
    select CookbookName = 'Treats for two', RecipeName = 'Apple Yogurt Smoothie', CookbookRecipeSequence = 1 
    union select 'Treats for two', 'Cheese Bread', 2
    union select 'Treats for two', 'Butter Muffins', 3
-   union select 'GoodFood', 'Vegetable Soup', 1
-   union select 'GoodFood', 'Tasty topped BBQ Burgers', 2 
-   union select 'GoodFood', 'Teriyaki Schnitzle', 3 
+   --union select 'GoodFood', 'Vegetable Soup', 1
+   union select 'GoodFood', 'Tasty topped BBQ Burgers', 1 
+   union select 'GoodFood', 'Teriyaki Schnitzle', 2 
    union select 'deliciusShabbesFood', 'Chicken cooked in wine', 1
    union select 'deliciusShabbesFood', 'Potato Kugel', 2
    union select 'deliciusShabbesFood', 'Easy homemade Ice Cream', 3
