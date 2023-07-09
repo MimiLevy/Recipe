@@ -37,7 +37,6 @@
             this.lblCaptionDatePublished = new System.Windows.Forms.Label();
             this.lblCaptionDateArchived = new System.Windows.Forms.Label();
             this.lblCaptionRecipePicture = new System.Windows.Forms.Label();
-            this.txtDateCreated = new System.Windows.Forms.TextBox();
             this.lblCaptionRecipeStatus = new System.Windows.Forms.Label();
             this.txtCalories = new System.Windows.Forms.TextBox();
             this.txtRecipeName = new System.Windows.Forms.TextBox();
@@ -50,6 +49,7 @@
             this.lblRecipeStatus = new System.Windows.Forms.Label();
             this.lblDatePublished = new System.Windows.Forms.Label();
             this.lblDateArchived = new System.Windows.Forms.Label();
+            this.txtDateCreated = new System.Windows.Forms.TextBox();
             this.tblMain.SuspendLayout();
             this.tblButtons.SuspendLayout();
             this.SuspendLayout();
@@ -67,7 +67,6 @@
             this.tblMain.Controls.Add(this.lblCaptionDatePublished, 0, 5);
             this.tblMain.Controls.Add(this.lblCaptionDateArchived, 0, 6);
             this.tblMain.Controls.Add(this.lblCaptionRecipePicture, 0, 8);
-            this.tblMain.Controls.Add(this.txtDateCreated, 1, 4);
             this.tblMain.Controls.Add(this.lblCaptionRecipeStatus, 0, 7);
             this.tblMain.Controls.Add(this.txtCalories, 1, 3);
             this.tblMain.Controls.Add(this.txtRecipeName, 1, 2);
@@ -78,6 +77,7 @@
             this.tblMain.Controls.Add(this.lblRecipeStatus, 1, 7);
             this.tblMain.Controls.Add(this.lblDatePublished, 1, 5);
             this.tblMain.Controls.Add(this.lblDateArchived, 1, 6);
+            this.tblMain.Controls.Add(this.txtDateCreated, 1, 4);
             this.tblMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tblMain.Location = new System.Drawing.Point(0, 0);
             this.tblMain.Margin = new System.Windows.Forms.Padding(5);
@@ -200,15 +200,6 @@
             this.lblCaptionRecipePicture.Text = "Recipe Picture";
             this.lblCaptionRecipePicture.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // txtDateCreated
-            // 
-            this.txtDateCreated.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtDateCreated.Location = new System.Drawing.Point(186, 305);
-            this.txtDateCreated.Margin = new System.Windows.Forms.Padding(5);
-            this.txtDateCreated.Name = "txtDateCreated";
-            this.txtDateCreated.Size = new System.Drawing.Size(409, 38);
-            this.txtDateCreated.TabIndex = 13;
-            // 
             // lblCaptionRecipeStatus
             // 
             this.lblCaptionRecipeStatus.AutoSize = true;
@@ -244,7 +235,7 @@
             // 
             this.lstCuisineTypeDesc.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lstCuisineTypeDesc.FormattingEnabled = true;
-            this.lstCuisineTypeDesc.Location = new System.Drawing.Point(184, 94);
+            this.lstCuisineTypeDesc.Location = new System.Drawing.Point(184, 88);
             this.lstCuisineTypeDesc.Name = "lstCuisineTypeDesc";
             this.lstCuisineTypeDesc.Size = new System.Drawing.Size(206, 39);
             this.lstCuisineTypeDesc.TabIndex = 18;
@@ -253,7 +244,7 @@
             // 
             this.lstUserName.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lstUserName.FormattingEnabled = true;
-            this.lstUserName.Location = new System.Drawing.Point(184, 22);
+            this.lstUserName.Location = new System.Drawing.Point(184, 16);
             this.lstUserName.Name = "lstUserName";
             this.lstUserName.Size = new System.Drawing.Size(206, 39);
             this.lstUserName.TabIndex = 19;
@@ -333,6 +324,14 @@
             this.lblDateArchived.Size = new System.Drawing.Size(413, 35);
             this.lblDateArchived.TabIndex = 24;
             // 
+            // txtDateCreated
+            // 
+            this.txtDateCreated.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtDateCreated.Location = new System.Drawing.Point(184, 305);
+            this.txtDateCreated.Name = "txtDateCreated";
+            this.txtDateCreated.Size = new System.Drawing.Size(413, 38);
+            this.txtDateCreated.TabIndex = 25;
+            // 
             // frmRecipe
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 31F);
@@ -363,7 +362,6 @@
         private Label lblCaptionRecipePicture;
         private TextBox txtRecipeName;
         private TextBox txtCalories;
-        private TextBox txtDateCreated;
         private Label lblCaptionRecipeStatus;
         private ComboBox lstCuisineTypeDesc;
         private ComboBox lstUserName;
@@ -374,5 +372,6 @@
         private Label lblRecipeStatus;
         private Label lblDatePublished;
         private Label lblDateArchived;
+        private TextBox txtDateCreated;
     }
 }

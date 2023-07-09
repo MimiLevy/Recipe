@@ -133,7 +133,7 @@ on cr.recipeid = r.recipeid
 where mcr.RecipeId is null
 and cr.RecipeId is null
 and r.RecipeStatus <> 'draft'
-or (r.RecipeStatus <> 'archived' and datediff(day, r.DateArchived, getdate()) <=  30)
+or (r.RecipeStatus <> 'archived' and datediff(day, r.DateArchived, getdate()) >=  30)
 order by r.RecipeId desc
 ";
             DataTable dt = SQLUtility.GetDataTable("select top 1 * from recipe order by recipeid");

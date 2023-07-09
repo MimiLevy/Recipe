@@ -38,29 +38,11 @@ namespace RecipeAppsSystem
         }
         public static void Save(DataTable dtRecipe)
         {
-            SQLUtility.DebugPrintDataTable(dtRecipe);
+            //SQLUtility.DebugPrintDataTable(dtRecipe);
             DataRow r = dtRecipe.Rows[0];
-            int recipeid = (int)r["RecipeId"];
-            string sql = "";
+            SQLUtility.SaveDataRow(r, "RecipeUpdate");
 
-            if (recipeid > 0)
-            {
-                sql = String.Join(Environment.NewLine, $"update Recipe set",
-                    $"StaffId = '{r["StaffId"]}',",
-                    $"CuisineTypeId = '{r["CuisineTypeId"]}',",
-                    $"RecipeName = '{r["RecipeName"]}',",
-                    $"Calories = '{r["Calories"]}',",
-                    $"DateCreated = '{r["DateCreated"]}'",
-                    $"where RecipeId = '{r["RecipeId"]}'"
-                    );
-            }
-            else
-            {
-                sql = "insert Recipe(StaffId, CuisineTypeId, RecipeName, Calories, DateCreated)";
-                sql += $"select '{r["StaffId"]}', '{r["CuisineTypeId"]}', '{r["RecipeName"]}', '{r["Calories"]}', '{r["DateCreated"]}'";
-            }
-
-            SQLUtility.ExecuteSQL(sql);
+            //SQLUtility.ExecuteSQL(sql);
         }
 
         public static void Delete(DataTable dtRecipe)

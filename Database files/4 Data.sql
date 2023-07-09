@@ -95,7 +95,7 @@ go
 
 ;
 with x as(
-   select FirstName = 'Michael', LastName = 'Kors', CuisineType = 'American', RecipeName = 'Chocolate Chip Cookies', Calories = 249, DateCreated = '01/02/22', DatePublished = '01/04/22', DateArchived = null
+   select FirstName = 'Michael', LastName = 'Kors', CuisineType = 'American', RecipeName = 'Chocolate Chip Cookies', Calories = 249, DateCreated = '01/02/22', DatePublished = '01/04/22', DateArchived = '06/18/23'
    union select 'John', 'Lewis', 'French', 'Apple Yogurt Smoothie', 431, '05/27/2022', null, null
    union select 'Ted', 'Baker', 'English', 'Cheese Bread', 71, '02/12/2022', '02/25/2022', '04/29/2022'
    union select 'Michael', 'Kors',  'American', 'Butter Muffins', 189, '04/07/2022', '05/05/2022', null
