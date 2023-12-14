@@ -1,16 +1,24 @@
-create or alter procedure dbo.CuisineTypeGet
-(
+use RecipeDB
+go
+
+create or alter procedure dbo.CuisineTypeGet(
 	@CuisineTypeId int = 0,
 	@CuisineTypeDesc varchar(30) = '',
 	@All bit = 0
 )
 as
 begin
+	declare @return int = 0
+
+	select @CuisineTypeId = isnull(@CuisineTypeId,0), @All = isnull(@All,0)
+
 	select c.CuisineTypeId, c.CuisineTypeDesc
 	from CuisineType c
 	where c.CuisineTypeId = @CuisineTypeId
 	or (@CuisineTypeDesc <> '' and c.CuisineTypeDesc like '%' + @CuisineTypeDesc + '%')
 	or @All = 1
+
+	return @return
 end 
 go
 

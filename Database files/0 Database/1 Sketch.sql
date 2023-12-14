@@ -64,8 +64,8 @@ Meal
 
 Course
     CourseName varchar(25) not null not blank unique
-    CourseSequence int not null
-        constraint CourseSequence must be greater than 0
+    Sequence int not null
+        constraint Sequence must be greater than 0
 
 
 MealCourse

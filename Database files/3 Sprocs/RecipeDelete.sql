@@ -1,11 +1,15 @@
+use RecipeDB
+go
+
 create or alter procedure RecipeDelete(
 	@RecipeId int, 
 	@Message varchar(100) = '' output
 )
 as
 begin
-
 	declare @return int = 0
+
+	select @RecipeId = isnull(@RecipeId,0)
 
 	if not exists(
 		select * 
@@ -25,7 +29,7 @@ begin
 	begin try
 		begin tran
 		delete RecipeIngredient where recipeid = @RecipeId
-		delete RecipeDirection where RecipeId = @RecipeId
+		delete RecipeStep where RecipeId = @RecipeId
 		delete Recipe where recipeid = @RecipeId
 		commit
 	end try

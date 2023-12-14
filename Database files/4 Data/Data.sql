@@ -8,7 +8,7 @@ delete MealCourseRecipe
 delete MealCourse
 delete Course
 delete Meal
-delete RecipeDirection
+delete RecipeStep
 delete RecipeIngredient 
 delete Recipe
 delete MeasurementType
@@ -23,6 +23,7 @@ union select 'Michael', 'Kors', 'M.K.LoveFood'
 union select 'Anna', 'Klein', 'A.K.210'
 union select 'Ted', 'Baker', '1980Ted'
 go 
+
 
 insert CuisineType(CuisineTypeDesc)
 select 'American'
@@ -95,7 +96,7 @@ go
 
 ;
 with x as(
-   select FirstName = 'Michael', LastName = 'Kors', CuisineType = 'American', RecipeName = 'Chocolate Chip Cookies', Calories = 249, DateCreated = '01/02/22', DatePublished = '01/04/22', DateArchived = '06/18/23'
+   select FirstName = 'Michael', LastName = 'Kors', CuisineType = 'American', RecipeName = 'Chocolate Chip Cookies', Calories = 249, DateDrafted = '01/02/22', DatePublished = '01/04/22', DateArchived = '06/18/23'
    union select 'John', 'Lewis', 'French', 'Apple Yogurt Smoothie', 431, '05/27/2022', null, null
    union select 'Ted', 'Baker', 'English', 'Cheese Bread', 71, '02/12/2022', '02/25/2022', '04/29/2022'
    union select 'Michael', 'Kors',  'American', 'Butter Muffins', 189, '04/07/2022', '05/05/2022', null
@@ -108,8 +109,8 @@ with x as(
    union select 'John', 'Lewis',  'Japan', 'Baked rice', 362, '01/27/2022', '02/27/2022', '03/27/2022'
    union select 'Ted', 'Baker', 'English', 'Vegetable Soup', 67, '06/20/2022', null, null
 )
-insert Recipe(StaffId,CuisineTypeId,RecipeName,Calories,DateCreated,DatePublished,DateArchived)
-select s.StaffId, ct.CuisineTypeId, x.RecipeName, x.Calories, x.DateCreated, x.DatePublished, x.DateArchived
+insert Recipe(StaffId,CuisineTypeId,RecipeName,Calories,DateDrafted,DatePublished,DateArchived)
+select s.StaffId, ct.CuisineTypeId, x.RecipeName, x.Calories, x.DateDrafted, x.DatePublished, x.DateArchived
 from x
 join Staff s 
 on x.FirstName = s.FirstName
@@ -134,7 +135,7 @@ with x as(
    union select 'Apple Yogurt Smoothie', 'orange juice', 'cup', 0.5, 4
    union select 'Apple Yogurt Smoothie', 'honey', 'tbsp', 2, 5
    union select 'Apple Yogurt Smoothie', 'ice cubes', null, 5, 6
-   union select 'Cheese Bread', ' club bread', null, 1, 1
+   union select 'Cheese Bread', 'club bread', null, 1, 1
    union select 'Cheese Bread', 'butter', 'oz', 4, 2
    union select 'Cheese Bread', 'shredded cheese', 'oz', 8, 3
    union select 'Cheese Bread', 'cloves garlic', null, 2, 4
@@ -153,7 +154,7 @@ with x as(
    union select 'Chicken cooked in wine', 'wine', 'cup', 0.5, 3
    union select 'Chicken cooked in wine', 'onion', null, 1, 4
    union select 'Chicken cooked in wine', 'salt' , 'tbsp', 1, 5
-   union select 'Potato Kugel', 'potatoe', null, 6, 1
+   union select 'Potato Kugel', 'potato', null, 6, 1
    union select 'Potato Kugel', 'onion', null, 1, 2
    union select 'Potato Kugel', 'egg', null, 4, 3
    union select 'Potato Kugel', 'oil', 'cup', 0.25, 4
@@ -168,7 +169,7 @@ with x as(
    union select 'Tasty topped BBQ Burgers', 'crusty roll', null, 4, 4
    union select 'Tasty topped BBQ Burgers', 'tomatoe', null, 2, 5
    union select 'Tasty topped BBQ Burgers', 'red onion', null, 1, 6
-   union select 'Cold Orange Juice Drink', 'juicy oranges', null, 5, 1
+   union select 'Cold Orange Juice Drink', 'juicy orange', null, 5, 1
    union select 'Cold Orange Juice Drink', 'lemon', null, 0.5, 2
    union select 'Teriyaki Schnitzle', 'chicken breast', null, null, 1
    union select 'Teriyaki Schnitzle', 'teriyaki sauce', 'cup', 0.75, 2
@@ -187,7 +188,7 @@ with x as(
    union select 'Vegetable Soup', 'celery with the leaves', null, 1, 5
    union select 'Vegetable Soup', 'salt', 'pinch', null, 6
 )
-insert RecipeIngredient(RecipeId,IngredientId,MeasurementTypeId,Amount,IngredientSequence)
+insert RecipeIngredient(RecipeId,IngredientId,MeasurementTypeId,Amount,Sequence)
 select r.RecipeId, i.IngredientId, mt.MeasurementTypeId, x.Amount, x.IngredientSequence
 from x 
 join Recipe r 
@@ -200,7 +201,7 @@ go
 
 ;
 with x as(
-   select RecipeName = 'Chocolate Chip Cookies', DirectionDesc = 'mix well', DirectionSequence = 1
+   select RecipeName = 'Chocolate Chip Cookies', StepDesc = 'mix well', Sequence = 1
    union select 'Chocolate Chip Cookies', 'add flour, vanilla sugar, baking powder and baking soda', 2
    union select 'Chocolate Chip Cookies', 'beat for 5 minutes', 3 
    union select 'Chocolate Chip Cookies', 'add chocolate chips', 4
@@ -260,8 +261,8 @@ with x as(
    union select 'Vegetable Soup', 'Add spices and cook for about 40 minutes', 5                 
    union select 'Vegetable Soup', 'Chicken can be added for those who want meat soup ', 6
 )
-insert RecipeDirection(RecipeId,DirectionDesc,DirectionSequence)
-select r.RecipeId, x.DirectionDesc, x.DirectionSequence 
+insert RecipeStep(RecipeId,StepDesc,Sequence)
+select r.RecipeId, x.StepDesc, x.Sequence 
 from x 
 join Recipe r 
 on x.RecipeName = r.RecipeName
@@ -281,7 +282,7 @@ join Staff s
 on x.UserName = s.UserName
 go 
 
-insert Course(CourseName,CourseSequence)
+insert Course(CourseName,Sequence)
 select 'Appetizer', 1
 union select 'Soup', 2
 union select 'Main', 3
@@ -295,7 +296,7 @@ with x as(
    union select 'Shabbes meal', 'Main'
    union select 'Shabbes meal', 'Dessert'
    union select 'BBQ Supper', 'Main'   
-   union select 'BBQ Supper', 'Appetizer'
+   --union select 'BBQ Supper', 'Appetizer'
    union select 'Good Easy Supper', 'Main'
    union select 'Good Easy Supper', 'Soup'     
 )
@@ -339,8 +340,8 @@ go
 ;
 with x as(
    select UserName = '1234J.L.', CookbookName = 'Treats for two', Price = 30, CookbookActive = 1
-   union select '1980Ted', 'GoodFood', 36, 0
-   union select 'A.K.210', 'deliciusShabbesFood', 40, 1
+   union select '1980Ted', 'Good Food', 36, 0
+   union select 'A.K.210', 'Delicius Shabbes Food', 40, 1
    union select '1980Ted', 'Yummmmm', 25, 0
 )
 insert Cookbook(StaffId,CookbookName,Price,CookbookActive)
@@ -352,20 +353,20 @@ go
 
 ;
 with x as(
-   select CookbookName = 'Treats for two', RecipeName = 'Apple Yogurt Smoothie', CookbookRecipeSequence = 1 
+   select CookbookName = 'Treats for two', RecipeName = 'Apple Yogurt Smoothie', Sequence = 1 
    union select 'Treats for two', 'Cheese Bread', 2
    union select 'Treats for two', 'Butter Muffins', 3
-   --union select 'GoodFood', 'Vegetable Soup', 1
-   union select 'GoodFood', 'Tasty topped BBQ Burgers', 1 
-   union select 'GoodFood', 'Teriyaki Schnitzle', 2 
-   union select 'deliciusShabbesFood', 'Chicken cooked in wine', 1
-   union select 'deliciusShabbesFood', 'Potato Kugel', 2
-   union select 'deliciusShabbesFood', 'Easy homemade Ice Cream', 3
+   --union select 'Good Food', 'Vegetable Soup', 1
+   union select 'Good Food', 'Tasty topped BBQ Burgers', 1 
+   union select 'Good Food', 'Teriyaki Schnitzle', 2 
+   union select 'Delicius Shabbes Food', 'Chicken cooked in wine', 1
+   union select 'Delicius Shabbes Food', 'Potato Kugel', 2
+   union select 'Delicius Shabbes Food', 'Easy homemade Ice Cream', 3
    union select 'Yummmmm', 'Cold Orange Juice Drink', 1
    union select 'Yummmmm', 'Baked Rice', 2   
 )
-insert CookbookRecipe(CookbookId,RecipeId,CookbookRecipeSequence)
-select c.CookbookId, r.RecipeId, x.CookbookRecipeSequence
+insert CookbookRecipe(CookbookId,RecipeId,Sequence)
+select c.CookbookId, r.RecipeId, x.Sequence
 from x 
 join Cookbook c
 on x.CookbookName = c.CookbookName

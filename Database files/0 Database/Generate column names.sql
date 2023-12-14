@@ -1,4 +1,4 @@
-declare @tablename varchar(50) = 'Recipe'
+declare @tablename varchar(50) = 'Staff'
 select 
 	concat('@', c.COLUMN_NAME, ' ', c.DATA_TYPE, 
 	case when c.CHARACTER_MAXIMUM_LENGTH is null then '' else concat('(', c.CHARACTER_MAXIMUM_LENGTH, ')') end,

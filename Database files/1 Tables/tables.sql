@@ -8,7 +8,7 @@ drop table if exists MealCourseRecipe
 drop table if exists MealCourse
 drop table if exists Course
 drop table if exists Meal
-drop table if exists RecipeDirection
+drop table if exists RecipeStep
 drop table if exists RecipeIngredient 
 drop table if exists Recipe
 drop table if exists MeasurementType
@@ -65,8 +65,8 @@ create table dbo.Recipe(
         constraint u_Recipe_RecipeName unique,
     Calories int not null
         constraint ck_Recipe_Calories_must_be_greater_than_zero check(Calories > 0),
-    DateCreated datetime not null
-        constraint ck_Recipe_DateCreated_cannot_be_before_website_was_created_and_not_in_the_future check(DateCreated between 01/01/22 and getdate()),
+    DateDrafted datetime not null
+        constraint ck_Recipe_DateDrafted_cannot_be_before_website_was_created_and_not_in_the_future check(DateDrafted between 01/01/22 and getdate()),
     DatePublished datetime null 
         constraint ck_Recipe_DatePublished_cannot_be_before_website_was_created_and_not_in_the_future check(DatePublished between 01/01/22 and getdate()),
     DateArchived datetime null 
@@ -77,8 +77,8 @@ create table dbo.Recipe(
                     when DateArchived is not null then 'Archived'
                     end persisted,
     RecipePicture as concat('Recipe', '-', replace(RecipeName, ' ', '-'), '.jpg') persisted,
-    constraint ck_Recipe_DatePublished_must_be_after_dateCreated check(DateCreated < DatePublished),
-    constraint ck_Recipe_DateArchived_must_be_after_DateCreated_and_DatePublished check(DateArchived > DateCreated and DateArchived > DatePublished)
+    --constraint ck_Recipe_DatePublished_must_be_after_DateDrafted check(DateDrafted < DatePublished),
+    --constraint ck_Recipe_DateArchived_must_be_after_DateDrafted_and_DatePublished check(DateArchived > DateDrafted and DateArchived > DatePublished)
 )
 go 
 
@@ -93,21 +93,22 @@ create table dbo.RecipeIngredient (
         --Reason why I think the amount should be nullable is because some ingredients don't have an amount. ex. pinch of salt
     Amount decimal(5,2) null
         constraint ck_RecipeIngredient_Amount_must_be_greater_than_zero check(Amount > 0),
-    IngredientSequence int not null 
-        constraint RecipeIngredient_IngredientSequence_must_be_greater_than_zero check(IngredientSequence > 0),
+    "Sequence" int not null 
+        constraint RecipeIngredient_IngredientSequence_must_be_greater_than_zero check("Sequence" > 0)
+		--constraint RecipeIngredient_IngredientSequence unique,
     constraint u_RecipeIngredient_RecipeId_IngredientId unique(RecipeId,IngredientId)
 )
 go
 
-create table dbo.RecipeDirection(
-    RecipeDirectionId int not null identity primary key, 
+create table dbo.RecipeStep(
+    RecipeStepId int not null identity primary key, 
     RecipeId int not null 
-        constraint f_Recipe_RecipeDirection foreign key references Recipe(RecipeId),
-    DirectionDesc varchar(500) not null
-        constraint ck_RecipeDirection_DirectionDesc_cannot_be_blank check(DirectionDesc <> ''),
-    DirectionSequence int not null 
-        constraint ck_RecipeDirection_DirectionSequence_must_be_geater_than_zero check(DirectionSequence > 0),
-    constraint u_RecipeDirection_RecipeId_DirectionSequence unique(RecipeId,DirectionSequence)
+        constraint f_Recipe_RecipeStep foreign key references Recipe(RecipeId),
+    StepDesc varchar(500) not null
+        constraint ck_RecipeStep_StepDesc_cannot_be_blank check(StepDesc <> ''),
+    Sequence int not null 
+        constraint ck_RecipeStep_Sequence_must_be_geater_than_zero check(Sequence > 0),
+    constraint u_RecipeStep_RecipeId_Sequence unique(RecipeId,Sequence)
 )
 go 
 
@@ -118,9 +119,9 @@ create table dbo.Meal(
     MealName varchar(50) not null 
         constraint ck_Meal_MealName_cannot_be_blank check(MealName <> '')
         constraint u_Meal_MealName unique,
-    DateCreated date not null
-        constraint d_Meal_DateCreated default getdate()
-        constraint ck_Meal_DateCreated_cannot_be_before_website_was_published_and_not_in_the_future check(DateCreated between '01/01/2022' and getdate()),
+    DateDrafted date not null
+        constraint d_Meal_DateDrafted default getdate()
+        constraint ck_Meal_DateDrafted_cannot_be_before_website_was_published_and_not_in_the_future check(DateDrafted between '01/01/2022' and getdate()),
     MealActive bit not null constraint d_Meal_MealActive default(1),
     MealPicture as concat('Meal', '-', replace(MealName, ' ', '-'), '.jpg') persisted
 )
@@ -131,8 +132,8 @@ create table dbo.Course(
     CourseName varchar(50) not null 
         constraint ck_Course_CourseName_cannot_be_blank check(CourseName <> '')
         constraint u_Meal_CourseName unique,
-    CourseSequence int not null
-        constraint ck_Course_CourseSequence_must_be_greater_than_zero check(CourseSequence > 0)
+    Sequence int not null
+        constraint ck_Course_Sequence_must_be_greater_than_zero check(Sequence > 0)
 )
 go
 
@@ -166,9 +167,9 @@ create table dbo.Cookbook(
         constraint u_Cookbook_CookbookName unique,
     Price decimal(5,2) not null
         constraint ck_Cookbook_Price_must_be_greater_than_zero check(Price > 0),
-    DateCreated date 
-        constraint d_Cookbook_DateCreated default getdate()
-        constraint ck_Cookbook_DateCreated_cannot_be_before_website_was_created_and_not_in_the_future check(DateCreated between '01/01/2022' and getdate()),
+    DateDrafted date 
+        constraint d_Cookbook_DateDrafted default getdate()
+        constraint ck_Cookbook_DateDrafted_cannot_be_before_website_was_created_and_not_in_the_future check(DateDrafted between '01/01/2022' and getdate()),
     CookbookActive bit not null,
     CookbookPicture as concat('Cookbook', '-', replace(CookbookName, ' ', '-'), '.jpg')
 )
@@ -180,8 +181,8 @@ create table dbo.CookbookRecipe(
         constraint f_Cookbook_CookbookRecipe foreign key references Cookbook(CookbookId),
     RecipeId int not null
         constraint f_Recipe_CookbookRecipe foreign key references Recipe(RecipeId),
-    CookbookRecipeSequence int not null
-        constraint ck_CookbookRecipe_CookbookRecipeSequence_must_be_greater_than_zero check(CookbookRecipeSequence > 0),
+    Sequence int not null
+        constraint ck_CookbookRecipe_Sequence_must_be_greater_than_zero check(Sequence > 0),
     constraint u_CookbookRecipe_CookbookId_RecipeId unique(CookbookId,RecipeId)
 
 )

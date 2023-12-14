@@ -6,9 +6,9 @@ begin
 		
 		;
 		with x as(
-			select r.RecipeId, DirectionsPerRecipe = count(rd.RecipeDirectionId)
+			select r.RecipeId, StepsPerRecipe = count(rd.RecipeStepId)
 			from Recipe r
-			join RecipeDirection rd
+			join RecipeStep rd
 			on r.RecipeId = rd.RecipeId
 			where r.RecipeId = @RecipeId
 			group by r.RecipeId
@@ -16,7 +16,7 @@ begin
 		select @value = concat(
 			r.RecipeName, ' (', ct.CuisineTypeDesc, ') has ', count(ri.IngredientId), 
 			(case when count(ri.IngredientId) = 1 then ' ingredient and ' else ' ingredients and ' end),
-			x.DirectionsPerRecipe, ' steps'
+			x.StepsPerRecipe, ' steps'
 		) 
 		from Recipe r
 		join CuisineType ct 
@@ -26,7 +26,7 @@ begin
 		join x
 		on x.RecipeId = r.RecipeId
 		where r.RecipeId = @RecipeId
-		group by r.RecipeName, ct.CuisineTypeDesc, x.DirectionsPerRecipe
+		group by r.RecipeName, ct.CuisineTypeDesc, x.StepsPerRecipe
 
 	return @value
 end
