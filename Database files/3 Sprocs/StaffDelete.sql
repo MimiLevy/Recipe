@@ -11,6 +11,9 @@ begin
 	
 	select @StaffId = isnull(@StaffId,0)
 
+--AF It would be good to put all these delete statements into a sql transaction
+--Af You should delete recipes that the staff member created
+
 	delete RecipeIngredient 
 	from RecipeIngredient ri
 	join Recipe r 

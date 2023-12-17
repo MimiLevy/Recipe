@@ -13,6 +13,7 @@ begin
 
 	select cr.CookbookRecipeId,cr.CookbookId, cr.RecipeId, cr.Sequence
 	from CookbookRecipe cr
+	--AF You don't seem to be using any columns in the recipe table so no need to join to it
 	left join Recipe r
 	on r.RecipeId = cr.RecipeId
 	where cr.CookbookId = @CookbookId

@@ -1,6 +1,10 @@
 ﻿using CPUFrameWork;
 using System.Data;
 
+//AF There is a typo on label for status of published, it's missing a b
+//AF If I try to save a recipe without a user filled in, it shows a strange message that it cannot delete staff, it should just show a message
+//that staff cannot be blank, and same thing is happening if cuisine is blank
+
 namespace RecipeWinForms
 {
     public partial class frmRecipeInformation : Form

@@ -1,6 +1,8 @@
 use RecipeDB
 go
 
+--AF The meal list page should have the meals sorted by meal name
+
 create or alter procedure dbo.MealGet(
 	@MealId int = 0,
 	@All bit = 0,
@@ -12,6 +14,8 @@ begin
 
 	select @MealId = isnull(@MealId,0), @All = isnull(@All,0)
 
+--Af You have a function to get meal calories, you can use it here.  Also it would be more concise to move this out of the cte, and just join to mealcourserecipe in the regular
+-- select statement, and get count of dsitinct mealcourserecipe recipe id
 	;
 	with x as(
 		select mc.MealId, NumCalories = sum(r.Calories), NumRecipes = count(r.RecipeId)
