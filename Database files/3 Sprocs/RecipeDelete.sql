@@ -28,6 +28,7 @@ begin
 
 	begin try
 		begin tran
+		--AF Also delete related cookbookrecipe records and mealcourserecipe records for this recipe, so that the recipe can be deleted even with those related records
 		delete RecipeIngredient where recipeid = @RecipeId
 		delete RecipeStep where RecipeId = @RecipeId
 		delete Recipe where recipeid = @RecipeId

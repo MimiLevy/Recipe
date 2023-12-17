@@ -1,6 +1,8 @@
 ﻿using CPUFrameWork;
 using System.Data;
 
+//AF If I try to save a cookbook without a user filled in, it shows a strange message that it cannot delete staff, it should just show a message that staff cannot be blank
+
 namespace RecipeWinForms
 {
 
