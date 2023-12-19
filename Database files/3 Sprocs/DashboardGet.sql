@@ -11,6 +11,7 @@ begin
 	select "Type" = '   Recipes   ' , Number = count(*) from Recipe r
 	union select "Type" = '   Meals   ' , Number = count(*) from Meal m
 	union select "Type" = '   Cookbooks   ' , Number = count(*) from Cookbook c
+	order by Type desc
 
 	return @return
 end
