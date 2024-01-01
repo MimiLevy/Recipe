@@ -38,6 +38,7 @@
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, Application.ProductName);
+                    return;
                 }
                 finally
                 {
