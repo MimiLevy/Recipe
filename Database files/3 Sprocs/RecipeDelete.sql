@@ -31,6 +31,8 @@ begin
 		--AF Also delete related cookbookrecipe records and mealcourserecipe records for this recipe, so that the recipe can be deleted even with those related records
 		delete RecipeIngredient where recipeid = @RecipeId
 		delete RecipeStep where RecipeId = @RecipeId
+		delete CookbookRecipe where RecipeId = @RecipeId
+		delete MealCourseRecipe where recipeid = @RecipeId
 		delete Recipe where recipeid = @RecipeId
 		commit
 	end try
@@ -43,3 +45,7 @@ begin
 	return @return
 end
 go
+
+
+
+

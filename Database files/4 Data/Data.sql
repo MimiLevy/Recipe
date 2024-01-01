@@ -296,9 +296,9 @@ with x as(
    union select 'Shabbes meal', 'Main'
    union select 'Shabbes meal', 'Dessert'
    union select 'BBQ Supper', 'Main'   
-   --union select 'BBQ Supper', 'Appetizer'
+   union select 'BBQ Supper', 'Appetizer'
    union select 'Good Easy Supper', 'Main'
-   union select 'Good Easy Supper', 'Soup'     
+   --union select 'Good Easy Supper', 'Soup'     
 )
 insert MealCourse(MealId,CourseId)
 select m.MealId, c.CourseId

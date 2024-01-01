@@ -3,9 +3,9 @@ using System.Data;
 
 namespace RecipeWinForms
 {
-/*AF It's not working to change the status from archvied to drafted, published to drafted, archived to published
-It would be nice if when you change the status, it would close that form and show the recipe form, with the updated status.  NOw, if  you change the status
-and go back to the recipe form, it doesn't show the updated status.  You can reach out if you are not sure how to do that */
+    /*AF It's not working to change the status from archvied to drafted, published to drafted, archived to published
+    It would be nice if when you change the status, it would close that form and show the recipe form, with the updated status.  NOw, if  you change the status
+    and go back to the recipe form, it doesn't show the updated status.  You can reach out if you are not sure how to do that */
     public partial class frmChangeRecipeStatus : Form
     {
         DataTable dtrecipe = new();
@@ -49,8 +49,8 @@ and go back to the recipe form, it doesn't show the updated status.  You can rea
                 if (txtbox.Name.Contains(btnname.Substring(3)))
                 {
                     DateTime dt = DateTime.Now;
-                    String date = dt.ToShortDateString();
-                    txtbox.Text = date;
+                    //String date = dt.ToShortDateString();
+                    txtbox.Text = dt.ToString();
                     foreach (Button btn in tblButtons.Controls)
                     {
                         if (btn.Name == btnname)
@@ -68,8 +68,10 @@ and go back to the recipe form, it doesn't show the updated status.  You can rea
 
                 Recipe.ChangeRecipeStatus(recipeid, datedrafted, datepublished, datearchived);
 
-                dtrecipe = Recipe.Load(recipeid);
-                bindsource.DataSource = dtrecipe;
+                LoadRecipeInformation();
+                ((frmMain)this.MdiParent).OpenForm(typeof(frmRecipeInformation), recipeid);
+                this.Close();
+          
             }
             catch (Exception ex)
             {
@@ -80,6 +82,17 @@ and go back to the recipe form, it doesn't show the updated status.  You can rea
             }
         }
 
+        
+        public void LoadRecipeInformation()
+        {
+            foreach (Form f in Application.OpenForms)
+            {
+                if (f is frmRecipeInformation)
+                {
+                    ((frmRecipeInformation)f).bindsource.DataSource = Recipe.Load(recipeid);
+                }
+            }
+        }
 
         private void SetButtonsEnabledBasedOnStatus(string currentstatus)
         {

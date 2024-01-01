@@ -54,11 +54,13 @@ namespace RecipeWinForms
             return b;
         }
         private void Delete(int rowindex)
-        {
-            var response = MessageBox.Show($"Are you sure you want to delete this {currenttabletype} and all related recipes, meals and cookbooks?", Application.ProductName, MessageBoxButtons.YesNo);
-            if (response == DialogResult.No)
+        {if (currenttabletype == TableTypeEnum.Staff)
             {
-                return;
+                var response = MessageBox.Show("Are you sure you want to delete this user and all related recipes, meals and cookbooks?", Application.ProductName, MessageBoxButtons.YesNo);
+                if (response == DialogResult.No)
+                {
+                    return;
+                }
             }
             int id = WindowsFormsUtility.GetIdFromGrid(gData, rowindex, currenttabletype.ToString() + "Id");
             if (id != 0)

@@ -339,7 +339,7 @@
             // 
             this.lstCuisineTypeDesc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lstCuisineTypeDesc.FormattingEnabled = true;
-            this.lstCuisineTypeDesc.Location = new System.Drawing.Point(217, 162);
+            this.lstCuisineTypeDesc.Location = new System.Drawing.Point(217, 158);
             this.lstCuisineTypeDesc.Margin = new System.Windows.Forms.Padding(4);
             this.lstCuisineTypeDesc.Name = "lstCuisineTypeDesc";
             this.lstCuisineTypeDesc.Size = new System.Drawing.Size(415, 36);
@@ -349,7 +349,7 @@
             // 
             this.lstUserName.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lstUserName.FormattingEnabled = true;
-            this.lstUserName.Location = new System.Drawing.Point(217, 115);
+            this.lstUserName.Location = new System.Drawing.Point(217, 111);
             this.lstUserName.Margin = new System.Windows.Forms.Padding(4);
             this.lstUserName.Name = "lstUserName";
             this.lstUserName.Size = new System.Drawing.Size(415, 36);
@@ -432,11 +432,11 @@
             // 
             this.lblPublishedCaption.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblPublishedCaption.AutoSize = true;
-            this.lblPublishedCaption.Location = new System.Drawing.Point(166, 5);
+            this.lblPublishedCaption.Location = new System.Drawing.Point(160, 5);
             this.lblPublishedCaption.Name = "lblPublishedCaption";
-            this.lblPublishedCaption.Size = new System.Drawing.Size(85, 28);
+            this.lblPublishedCaption.Size = new System.Drawing.Size(97, 28);
             this.lblPublishedCaption.TabIndex = 2;
-            this.lblPublishedCaption.Text = "Pulished";
+            this.lblPublishedCaption.Text = "Published";
             // 
             // lblArchivedCaption
             // 

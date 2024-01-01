@@ -6,7 +6,6 @@ go
 create or alter procedure dbo.AutoCreateCookbook(
     @CookbookId int = 0 output,
 	--Af this parameter doesn't seem to be used anywhere in the sproc
-	@CookbookRecipeId int = 0 output,
 	@StaffId int = 0,
 	@Message varchar(500) = '' output
 )
@@ -14,10 +13,10 @@ as
 begin
 	declare @return int = 0
 
-	select @CookbookId = isnull(@CookbookId,0), @CookbookRecipeId = isnull(@CookbookRecipeId,0), @StaffId = isnull(@StaffId,0)
+	select @CookbookId = isnull(@CookbookId,0), @StaffId = isnull(@StaffId,0)
 
 	insert Cookbook(StaffId, CookbookName, Price, DateDrafted, CookbookActive)
-	select s.StaffId, concat('Recipes by ', s.FirstName, ' ', s.LastName), count(r.RecipeId)*1.13, getdate(), 1
+	select s.StaffId, concat('Recipes by ', s.FirstName, ' ', s.LastName), count(r.RecipeId)*1.33, getdate(), 1
 	from Staff s
 	join Recipe r
 	on r.StaffId = s.StaffId
@@ -27,7 +26,7 @@ begin
 	select @CookbookId = scope_identity()
 
 	insert CookbookRecipe(CookbookId, RecipeId, Sequence)
-	select @CookbookId , r.RecipeId, scope_identity()
+	select @CookbookId , r.RecipeId, row_number() over(order by r.RecipeName)
 	from Recipe r
 	where r.StaffId = @StaffId
 	order by r.RecipeName

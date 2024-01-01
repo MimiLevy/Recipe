@@ -1,4 +1,4 @@
-﻿using CPUFrameWork;
+﻿    using CPUFrameWork;
 using System.Data;
 
 //AF If I try to save a cookbook without a user filled in, it shows a strange message that it cannot delete staff, it should just show a message that staff cannot be blank
@@ -61,25 +61,34 @@ namespace RecipeWinForms
         {
             bool b = false;
             Application.UseWaitCursor = true;
-            try
+            var staffid = SQLUtility.GetValueFromFirstRowAsInt(dtcookbook, "Staffid");
+            if (staffid != 0)
             {
-                Cookbook.Save(dtcookbook);
-                b = true;
-                bindsource.ResetBindings(false);
-                cookbookid = SQLUtility.GetValueFromFirstRowAsInt(dtcookbook, "CookbookId");
-                this.Tag = cookbookid;
-                dtcookbook = Cookbook.Load(cookbookid);
-                bindsource.DataSource = dtcookbook;
-               
-                SetButtonsEnabledBasedOnNewRecord();
-                this.Text = GetCookbookDesc();
+                try
+                {
+                    Cookbook.Save(dtcookbook);
+                    b = true;
+                    bindsource.ResetBindings(false);
+                    cookbookid = SQLUtility.GetValueFromFirstRowAsInt(dtcookbook, "CookbookId");
+                    this.Tag = cookbookid;
+                    dtcookbook = Cookbook.Load(cookbookid);
+                    bindsource.DataSource = dtcookbook;
+
+                    SetButtonsEnabledBasedOnNewRecord();
+                    this.Text = GetCookbookDesc();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, Application.ProductName);
+                }
+                finally
+                {
+                    Application.UseWaitCursor = false;
+                }
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show(ex.Message, Application.ProductName);
-            }
-            finally
-            {
+                MessageBox.Show("User cannot be blank", Application.ProductName);
                 Application.UseWaitCursor = false;
             }
             return b;

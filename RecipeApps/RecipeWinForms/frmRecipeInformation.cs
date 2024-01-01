@@ -12,12 +12,12 @@ namespace RecipeWinForms
         DataTable dtrecipe = new();
         DataTable dtrecipeingredient = new();
         DataTable dtrecipestep = new();
-        BindingSource bindsource = new();
+        internal BindingSource bindsource = new();
         string deletecolname = "deletecol";
         int recipeid = 0;
         public frmRecipeInformation()
         {
-            
+
             InitializeComponent();
             btnSaveRecipe.Click += BtnSaveRecipe_Click;
             btnDeleteRecipe.Click += BtnDeleteRecipe_Click;
@@ -29,6 +29,7 @@ namespace RecipeWinForms
             this.FormClosing += FrmRecipeInformation_FormClosing;
             this.Shown += FrmRecipeInformation_Shown;
         }
+
         public void LoadForm(int recipeidval)
         {
             recipeid = recipeidval;
@@ -63,8 +64,8 @@ namespace RecipeWinForms
             WindowsFormsUtility.AddComboBoxToGrid(gDataIngredients, Recipe.GetList("Ingredient"), "Ingredient", "IngredientName");
             WindowsFormsUtility.FormatGridForEdit(gDataIngredients, "RecipeIngredient");
             WindowsFormsUtility.AddDeleteButtonToGrid(gDataIngredients, deletecolname);
-            
-            
+
+
         }
 
         private void LoadRecipeSteps()
@@ -80,25 +81,36 @@ namespace RecipeWinForms
         {
             bool b = false;
             Application.UseWaitCursor = true;
-            try
+            var staffid = SQLUtility.GetValueFromFirstRowAsInt(dtrecipe, "Staffid");
+            var cuisinetypeid = SQLUtility.GetValueFromFirstRowAsInt(dtrecipe, "CuisineTypeId");
+            if (staffid != 0 && cuisinetypeid != 0)
             {
-                Recipe.Save(dtrecipe);
-                b = true;
-                bindsource.ResetBindings(false);
-                recipeid = SQLUtility.GetValueFromFirstRowAsInt(dtrecipe, "RecipeId");
-                this.Tag = recipeid;
-                dtrecipe = Recipe.Load(recipeid);
-                bindsource.DataSource = dtrecipe;
+                try
+                {
+                    Recipe.Save(dtrecipe);
+                    b = true;
+                    bindsource.ResetBindings(false);
+                    recipeid = SQLUtility.GetValueFromFirstRowAsInt(dtrecipe, "RecipeId");
+                    this.Tag = recipeid;
+                    dtrecipe = Recipe.Load(recipeid);
+                    bindsource.DataSource = dtrecipe;
 
-                SetButtonsEnabledBasedOnNewRecord();
-                this.Text = GetRecipeDesc();
+                    SetButtonsEnabledBasedOnNewRecord();
+                    this.Text = GetRecipeDesc();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, Application.ProductName);
+                }
+                finally
+                {
+                    Application.UseWaitCursor = false;
+                }
             }
-            catch(Exception ex)
+            else
             {
-                MessageBox.Show(ex.Message, Application.ProductName);
-            }
-            finally
-            {
+                string value = staffid == 0 ? "User" : "Cuisine";
+                MessageBox.Show(value + " cannot be blank", Application.ProductName);
                 Application.UseWaitCursor = false;
             }
             return b;
@@ -107,7 +119,7 @@ namespace RecipeWinForms
         private void Delete()
         {
             var response = MessageBox.Show("Are you sure you want to delete this Recipe?", Application.ProductName, MessageBoxButtons.YesNo);
-            if(response == DialogResult.No)
+            if (response == DialogResult.No)
             {
                 return;
             }
@@ -117,7 +129,7 @@ namespace RecipeWinForms
                 Recipe.Delete(dtrecipe);
                 this.Close();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, Application.ProductName);
             }
@@ -134,7 +146,7 @@ namespace RecipeWinForms
             {
                 RecipeIngredient.SaveTable(dtrecipeingredient, recipeid);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, Application.ProductName);
             }
@@ -142,19 +154,19 @@ namespace RecipeWinForms
         private void DeleteRecipeIngredient(int rowindex)
         {
             int id = WindowsFormsUtility.GetIdFromGrid(gDataIngredients, rowindex, "RecipeIngredientId");
-            if(id > 0)
+            if (id > 0)
             {
                 try
                 {
                     RecipeIngredient.Delete(id);
                     LoadRecipeIngredients();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, Application.ProductName);
                 }
             }
-            else if (id <  gDataIngredients.Rows.Count)
+            else if (id < gDataIngredients.Rows.Count)
             {
                 gDataIngredients.Rows.RemoveAt(rowindex);
             }
@@ -202,7 +214,7 @@ namespace RecipeWinForms
         {
             string value = "New Recipe";
             int pkvalue = SQLUtility.GetValueFromFirstRowAsInt(dtrecipe, "RecipeId");
-            if(pkvalue > 0)
+            if (pkvalue > 0)
             {
                 value = SQLUtility.GetValueFromFirstRowAsString(dtrecipe, "RecipeName");
             }
@@ -217,7 +229,7 @@ namespace RecipeWinForms
         {
             Save();
         }
-        
+
         private void BtnDeleteRecipe_Click(object? sender, EventArgs e)
         {
             Delete();
@@ -254,7 +266,7 @@ namespace RecipeWinForms
                 {
                     case DialogResult.Yes:
                         bool b = Save();
-                        if(b == false)
+                        if (b == false)
                         {
                             e.Cancel = true;
                             this.Activate();

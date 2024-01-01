@@ -1,4 +1,6 @@
-﻿namespace RecipeWinForms
+﻿using RecipeAppsSystem;
+
+namespace RecipeWinForms
 {
     public partial class frmMain : Form
     {

@@ -72,9 +72,9 @@ create table dbo.Recipe(
     DateArchived datetime null 
         constraint ck_Recipe_DateArchived_cannot_be_before_website_was_created_and_not_in_the_future check(DateArchived between 01/01/22 and getdate()),
     RecipeStatus as case 
-                    when DatePublished is null and DateArchived Is null then 'Draft'
-                    when DatePublished is not null and DateArchived is null then 'Published'
-                    when DateArchived is not null then 'Archived'
+                    when (DateDrafted >= DatePublished or DatePublished is null) and (DateDrafted >= DateArchived or DateArchived is null) then 'Draft'
+                    when (DatePublished >= DateDrafted or DateDrafted is null) and (DatePublished >= DateArchived or DateArchived is null) then 'Published'
+                    when (DateArchived >= DateDrafted or DateDrafted is null) and (DateArchived >= DatePublished or DatePublished is null) then 'Archived'
                     end persisted,
     RecipePicture as concat('Recipe', '-', replace(RecipeName, ' ', '-'), '.jpg') persisted,
     --constraint ck_Recipe_DatePublished_must_be_after_DateDrafted check(DateDrafted < DatePublished),
