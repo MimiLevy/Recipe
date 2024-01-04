@@ -12,7 +12,6 @@ as
 begin
 	declare	@return int = 0
 
---Af You should have isnull for RecipeName
 	select @RecipeId = isnull(@RecipeId,0), @RecipeName = isnull(@RecipeName,''), @All = isnull(@All,0)
 
 	select r.RecipeId, r.StaffId, r.CuisineTypeId, r.RecipeName, r.RecipeStatus, "User" = concat(s.FirstName, ' ', s.LastName), r.Calories, r.DateDrafted, r.DatePublished, r.DateArchived, "Num Ingredients" = count(ri.IngredientId), "ListOrder" = 1
