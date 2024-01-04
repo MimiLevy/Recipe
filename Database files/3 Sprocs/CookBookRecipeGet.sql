@@ -13,7 +13,6 @@ begin
 
 	select cr.CookbookRecipeId,cr.CookbookId, cr.RecipeId, cr.Sequence
 	from CookbookRecipe cr
-	--AF You don't seem to be using any columns in the recipe table so no need to join to it
 	where cr.CookbookId = @CookbookId
 	order by cr.Sequence
 

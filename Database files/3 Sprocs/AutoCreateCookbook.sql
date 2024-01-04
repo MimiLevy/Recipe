@@ -1,11 +1,8 @@
 use RecipeDB
 go 
 
---AF The price should be the number of recipes multiplies by $1.33, the recipes should be sequenced by recipe name, they shouldn't all have the same sequence
-
 create or alter procedure dbo.AutoCreateCookbook(
     @CookbookId int = 0 output,
-	--Af this parameter doesn't seem to be used anywhere in the sproc
 	@StaffId int = 0,
 	@Message varchar(500) = '' output
 )

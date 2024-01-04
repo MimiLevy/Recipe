@@ -1,9 +1,6 @@
 ﻿using CPUFrameWork;
 using System.Data;
 
-//AF other than the staff, it asks if you want to delete the record with related records but then the delete doesn't work because there are related records
-// The delete should work for ingredient, measurement, cuisine and courses
-
 namespace RecipeWinForms
 {
     public partial class frmDataMaintenance : Form

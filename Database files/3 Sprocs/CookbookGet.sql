@@ -1,8 +1,6 @@
 use RecipeDB
 go
 
---AF The cookbook list page shoule show cookbooks sorted by cookbook name
-
 Create or alter procedure dbo.CookbookGet(
 	@CookbookId int = 0, 
 	@All bit = 0,
@@ -18,7 +16,6 @@ begin
 	from Cookbook c
 	join Staff s 
 	on c.StaffId = s.Staffid
-	--Af After a left join, you shouldn't have a regular join, it can mess up the results sometimes.  In this case, you can just join to staff first and then left join to cookbookrecipe
 	left join CookbookRecipe cr
 	on cr.CookbookId = c.CookbookId
 	where c.CookbookId = @CookbookId

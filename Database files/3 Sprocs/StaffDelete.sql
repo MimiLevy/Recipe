@@ -11,9 +11,6 @@ begin
 	
 	select @StaffId = isnull(@StaffId,0)
 
---AF It would be good to put all these delete statements into a sql transaction
---Af You should delete recipes that the staff member created
-
 begin try 
 	begin tran
 		delete RecipeIngredient 
@@ -39,6 +36,7 @@ begin try
 		join Recipe r 
 		on r.RecipeId = cr.recipeid
 		where StaffId = @StaffId
+		--AF I think this delete statment is a mistake, you have it lower down too
 		delete recipe where StaffId = @StaffId
 
 		delete MealCourseRecipe
