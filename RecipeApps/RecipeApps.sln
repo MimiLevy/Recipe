@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CPUFramework", "..\..\CPUFr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CPUWindowsFormsFrameWork", "..\..\CPUWindowsFormsFrameWork\CPUWindowsFormsFrameWork.csproj", "{E65C255D-DECF-4FCE-8C97-5471292B85E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeAppsSystem", "RecipeAppsSystem\RecipeAppsSystem.csproj", "{9A3208B2-4A27-48D1-926E-B56EBA7E0BAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecipeAppsSystem", "RecipeAppsSystem\RecipeAppsSystem.csproj", "{9A3208B2-4A27-48D1-926E-B56EBA7E0BAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeAppsTest", "RecipeAppsTest\RecipeAppsTest.csproj", "{AD649395-8EF3-495C-86E0-07C6283ADDD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecipeAppsTest", "RecipeAppsTest\RecipeAppsTest.csproj", "{AD649395-8EF3-495C-86E0-07C6283ADDD5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeAppsMAUI", "RecipeAppsMAUI\RecipeAppsMAUI.csproj", "{32E70E98-4AB5-4968-95B4-0D93EA7A14EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,12 @@ Global
 		{AD649395-8EF3-495C-86E0-07C6283ADDD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD649395-8EF3-495C-86E0-07C6283ADDD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD649395-8EF3-495C-86E0-07C6283ADDD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32E70E98-4AB5-4968-95B4-0D93EA7A14EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32E70E98-4AB5-4968-95B4-0D93EA7A14EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32E70E98-4AB5-4968-95B4-0D93EA7A14EC}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{32E70E98-4AB5-4968-95B4-0D93EA7A14EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32E70E98-4AB5-4968-95B4-0D93EA7A14EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32E70E98-4AB5-4968-95B4-0D93EA7A14EC}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
