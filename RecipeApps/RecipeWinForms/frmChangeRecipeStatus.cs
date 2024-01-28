@@ -46,15 +46,7 @@ namespace RecipeWinForms
                 if (txtbox.Name.Contains(btnname.Substring(3)))
                 {
                     DateTime dt = DateTime.Now;
-                    //String date = dt.ToShortDateString();
                     txtbox.Text = dt.ToString();
-                    foreach (Button btn in tblButtons.Controls)
-                    {
-                        if (btn.Name == btnname)
-                        {
-                            btn.Enabled = false;
-                        }
-                    }
                 }
             }
             try
