@@ -35,26 +35,21 @@ namespace RecipeAppsTest
         [Test]
         public void InsertNewRecipe()
         {
-            DataTable dt = GetDataTable("select * from recipe where recipeid = 0");
-            DataRow r = dt.Rows.Add();
-            Assume.That(dt.Rows.Count == 1, "Datatable has more or less than 1 row");
-
             int staffid = GetFirstColumnFirstRowValue("select top 1 staffid from staff");
             Assume.That(staffid > 0, "No staff, can't test");
             int cuisinetypeid = GetFirstColumnFirstRowValue("select top 1 cuisinetypeid from cuisinetype");
             Assume.That(cuisinetypeid > 0, "No cuisinetype, can't test");
-
-
             string recipename = "Test " + DateTime.Now.ToString();
             TestContext.WriteLine("Insert Recipe - " + recipename + " to DB");
 
-            r["staffid"] = staffid;
-            r["cuisinetypeid"] = cuisinetypeid;
-            r["recipename"] = recipename;
-            r["calories"] = 250;
-            r["datedrafted"] = "2000-01-01";
             BizRecipe recipe = new();
-            recipe.Save(dt);
+            recipe.StaffId = staffid;
+            recipe.CuisineTypeId = cuisinetypeid;
+            recipe.RecipeName = recipename;
+            recipe.Calories = 250;
+            recipe.DateDrafted = DateTime.Now.AddYears(-10);
+            recipe.DatePublished = DateTime.Now.AddYears(-8);
+            recipe.Save();
 
             int newrecipeid = GetFirstColumnFirstRowValue("select recipeid from recipe where recipename =  '" + recipename + "'");
             Assert.IsTrue(newrecipeid > 0, "Recipe (" + recipename + ") is not found in DB");
@@ -100,8 +95,8 @@ namespace RecipeAppsTest
         {
             int recipeid = GetExistingRecipeId();
             Assume.That(recipeid > 0, "No recipes in DB, can't test");
-            string recipename = GetFirstColumnFirstRowValueAsString("select recipename from recipe where recipeid <> " + recipeid);
-            string currentrecipename = GetFirstColumnFirstRowValueAsString("select recipename from recipe where recipeid = " + recipeid);
+            string? recipename = GetFirstColumnFirstRowValueAsString("select recipename from recipe where recipeid <> " + recipeid);
+            string? currentrecipename = GetFirstColumnFirstRowValueAsString("select recipename from recipe where recipeid = " + recipeid);
             TestContext.WriteLine("Change recipe name from " + currentrecipename + " to different recipe name - " + recipename);
             DataTable dt = Recipe.Load(recipeid);
             dt.Rows[0]["recipename"] = recipename;
@@ -119,7 +114,8 @@ namespace RecipeAppsTest
             TestContext.WriteLine("Existing recipe with id = " + recipeid);
             TestContext.WriteLine("Ensure that app can delete recipe with id = " + recipeid);
             BizRecipe recipe = new();
-            recipe.Delete(dt);
+            recipe.Load(recipeid);
+            recipe.Delete();
             DataTable dtafterdelete = GetDataTable("select * from recipe where recipeid = " + recipeid);
             Assert.IsTrue(dtafterdelete.Rows.Count == 0, "Recipe with id = " + recipeid + " exists in DB");
             TestContext.WriteLine("Recipe with id = " + recipeid + " does not exist in DB");
@@ -140,23 +136,23 @@ namespace RecipeAppsTest
         [Test]
         public void DeletePublishedRecipeWithIngredients()
         {
-            string sql = @"
-select top 1 @recipeid = r.recipeid
-from Recipe r
-join RecipeIngredient ri
-on ri.RecipeId = r.RecipeId
-join RecipeDirection rd 
-on rd.RecipeId = r.RecipeId
-left join mealcourserecipe mcr
-on mcr.RecipeId = r.RecipeId
-left join CookbookRecipe cr 
-on cr.recipeid = r.recipeid
-where mcr.RecipeId is null
-and cr.RecipeId is null
-and r.RecipeStatus <> 'draft'
-or (r.RecipeStatus <> 'archived' and datediff(day, r.DateArchived, getdate()) >=  30)
-order by r.RecipeId desc
-";
+            //           string sql = @"
+            //select top 1 @recipeid = r.recipeid
+            //from Recipe r
+            //join RecipeIngredient ri
+            //on ri.RecipeId = r.RecipeId
+            //join RecipeDirection rd 
+            //on rd.RecipeId = r.RecipeId
+            //left join mealcourserecipe mcr
+            //on mcr.RecipeId = r.RecipeId
+            //left join CookbookRecipe cr 
+            //on cr.recipeid = r.recipeid
+            //where mcr.RecipeId is null
+            //and cr.RecipeId is null
+            //and r.RecipeStatus <> 'draft'
+            //or (r.RecipeStatus <> 'archived' and datediff(day, r.DateArchived, getdate()) >=  30)
+            //order by r.RecipeId desc
+            //";
             DataTable dt = GetDataTable("select top 1 * from recipe order by recipeid");
             int recipeid = (int)dt.Rows[0]["recipeid"];
             Assume.That(recipeid > 0, "No published recipes with ingredients, can't test");
@@ -175,10 +171,11 @@ order by r.RecipeId desc
             TestContext.WriteLine("Existing recipe with id = " + recipeid);
             TestContext.WriteLine("Ensure that app loads recipe with id = " + recipeid);
             BizRecipe recipe = new();
-            DataTable dt = recipe.Load(recipeid);
-            int loadedid = (int)dt.Rows[0]["RecipeId"];
-            Assert.IsTrue(loadedid == recipeid, loadedid + " <> " + recipeid);
-            TestContext.WriteLine("Loaded recipe = " + loadedid);
+            recipe.Load(recipeid);
+            int loadedid = recipe.RecipeId;
+            string recipename = recipe.RecipeName;
+            Assert.IsTrue(loadedid == recipeid && recipename != "", loadedid + " <> " + recipeid + ", RecipeName = " + recipename);
+            TestContext.WriteLine("Loaded recipe = " + loadedid + ", RecipeName = " + recipename);
         }
 
         [Test]
@@ -217,9 +214,9 @@ order by r.RecipeId desc
             TestContext.WriteLine("Num of rows returned by app = " + dt.Rows.Count);
         }
 
-        private string GetFirstColumnFirstRowValueAsString(string sql)
+        private string? GetFirstColumnFirstRowValueAsString(string sql)
         {
-            string s = "";
+            string? s = "";
             DataTable dt = GetDataTable(sql);
             if (dt.Rows.Count > 0 && dt.Columns.Count > 0)
             {
