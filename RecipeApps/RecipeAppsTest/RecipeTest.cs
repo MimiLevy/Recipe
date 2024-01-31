@@ -182,18 +182,27 @@ namespace RecipeAppsTest
         public void SearchRecipe()
         {
             string criteria = "d";
-            int num = GetFirstColumnFirstRowValue("select Total = count(*) from Recipe where RecipeName like '%" + criteria + "%'");
-            Assume.That(num > 0, "There are no recipes that match the search for " + criteria);
-            TestContext.WriteLine("There are " + num + " recipes that match " + criteria);
-            TestContext.WriteLine("Ensure  that recipe search returns " + num + " rows");
+            int count = GetCountOfRecordsForCriteria("Recipe", "RecipeName", criteria);
 
-            DataTable dt = Recipe.SearchForRecipes(criteria);
-            int results = dt.Rows.Count;
+            BizRecipe r = new();
+            var lst = r.Search(criteria);
 
-            Assert.IsTrue(results == num, "Results of recipe search does not match number of recipes, " + results + " <> " + num);
-            TestContext.WriteLine("Number of rows returnd by recipe search is " + results);
+            Assert.IsTrue(lst.Count == count, "Results of recipe search does not match number of recipes, " + lst.Count + " <> " + count);
+            TestContext.WriteLine("Number of rows returnd by recipe search is " + lst.Count);
         }
 
+        [Test]
+        public void SearchIngredient()
+        {
+            string criteria = "f";
+            int count = GetCountOfRecordsForCriteria("Ingredient", "IngredientName", criteria);
+
+            bizIngredient i = new();
+            var lst = i.Search(criteria);
+
+            Assert.IsTrue(lst.Count == count, "Results of recipe search does not match number of recipes, " + lst.Count + " <> " + count);
+            TestContext.WriteLine("Number of rows returnd by recipe search is " + lst.Count);
+        }
 
 
         [Test]
@@ -202,16 +211,61 @@ namespace RecipeAppsTest
         public void GetList(string tablename)
         {
 
-            int listrecordscount = GetFirstColumnFirstRowValue("select TotalCount = count(*) from " + tablename);
-            Assume.That(listrecordscount > 0, "No records in the list, can't test");
-            TestContext.WriteLine("Num of list records in DB  = " + listrecordscount);
-            TestContext.WriteLine("Ensure that number of rows return by app matches = " + listrecordscount);
+            int listrecordscount = GetCountOfRecords(tablename, false);
 
             DataTable dt = Recipe.GetList(tablename);
 
             Assert.IsTrue(dt.Rows.Count == listrecordscount, "Num rows returned by app (" + dt.Rows.Count + " <> " + listrecordscount);
 
             TestContext.WriteLine("Num of rows returned by app = " + dt.Rows.Count);
+        }
+
+        [Test]
+        [TestCase(false)]
+        [TestCase(true)]
+        public void GetListOfRecipes(bool includeblank)
+        {
+            int recipecount = GetCountOfRecords("Recipe", includeblank);
+
+            BizRecipe r = new();
+            var lst = r.GetList(includeblank);
+
+            Assert.IsTrue(lst.Count == recipecount, "Num rows returned by app (" + lst.Count + " <> " + recipecount);
+
+            TestContext.WriteLine("Num of rows returned by app = " + lst.Count);
+        }
+
+        [Test]
+        [TestCase(false)]
+        [TestCase(true)]
+        public void GetListOfIngredients(bool includeblank)
+        {
+            int recipecount = GetCountOfRecords("Ingredient", includeblank);
+
+            bizIngredient i = new();
+            var lst = i.GetList(includeblank);
+
+            Assert.IsTrue(lst.Count == recipecount, "Num rows returned by app (" + lst.Count + " <> " + recipecount);
+
+            TestContext.WriteLine("Num of rows returned by app = " + lst.Count);
+        }
+
+        private int GetCountOfRecords(string tablename, bool includeblank)
+        {
+            int tablerecordscount = GetFirstColumnFirstRowValue("select TotalCount = count(*) from " + tablename);
+            if (includeblank == true) { tablerecordscount = tablerecordscount + 1; }
+            Assume.That(tablerecordscount > 0, "No records in the list, can't test");
+            TestContext.WriteLine("Num of list records in DB  = " + tablerecordscount);
+            TestContext.WriteLine("Ensure that number of rows return by app matches = " + tablerecordscount);
+            return tablerecordscount;
+        }
+        private int GetCountOfRecordsForCriteria(string tablename, string columnname,string criteria)
+        {
+            int count = GetFirstColumnFirstRowValue($"select Total = count(*) from {tablename} where {columnname} like '%{criteria}%'");
+            Assume.That(count > 0, "There are no recipes that match the search for " + criteria);
+            TestContext.WriteLine("There are " + count + " recipes that match " + criteria);
+            TestContext.WriteLine("Ensure  that recipe search returns " + count + " rows");
+            return count;
         }
 
         private string? GetFirstColumnFirstRowValueAsString(string sql)

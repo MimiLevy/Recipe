@@ -1,8 +1,9 @@
 ﻿using CPUFramework;
+using System.Data.SqlClient;
 
 namespace RecipeAppsSystem
 {
-    public class BizRecipe : BizObject
+    public class BizRecipe : BizObject<BizRecipe>
 
     {
         public BizRecipe()
@@ -18,10 +19,17 @@ namespace RecipeAppsSystem
         private DateTime? _datepublished;
         private DateTime? _datearchived;
 
-    // I'm not sure if I'm meant to include the computed columns.
+        // I'm not sure if I'm meant to include the computed columns.
         private string _recipestatus = "";
         private string _recipepicture = "";
 
+        public List<BizRecipe> Search(string recipenameval)
+        {
+            SqlCommand cmd = SQLUtility.GetSqlCommand(this.GetSprocName);
+            SQLUtility.SetParamValue(cmd, "RecipeName", recipenameval);
+            DataTable dt = SQLUtility.GetDataTable(cmd);
+            return this.GetListFromDataTable(dt);
+        }
         public int RecipeId
         {
             get { return _recipeid; }
@@ -142,6 +150,6 @@ namespace RecipeAppsSystem
                 }
             }
         }
-      
+
     }
 }
