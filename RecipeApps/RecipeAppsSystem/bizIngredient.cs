@@ -3,7 +3,7 @@ using System.Data.SqlClient;
 
 namespace RecipeAppsSystem
 {
-    public class bizIngredient:BizObject<bizIngredient>
+    public class bizIngredient:bizObject<bizIngredient>
     {
         private int _ingredientid;
         private string _ingredientname = "";

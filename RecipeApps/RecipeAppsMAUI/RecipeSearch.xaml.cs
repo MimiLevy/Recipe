@@ -18,6 +18,4 @@ public partial class RecipeSearch : ContentPage
     {
 		SearchRecipes();
     }
-
-
 }

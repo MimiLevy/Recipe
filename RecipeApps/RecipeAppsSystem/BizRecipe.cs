@@ -3,7 +3,7 @@ using System.Data.SqlClient;
 
 namespace RecipeAppsSystem
 {
-    public class BizRecipe : BizObject<BizRecipe>
+    public class BizRecipe : bizObject<BizRecipe>
 
     {
         public BizRecipe()
