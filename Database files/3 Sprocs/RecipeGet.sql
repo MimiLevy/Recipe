@@ -14,7 +14,7 @@ begin
 
 	select @RecipeId = isnull(@RecipeId,0), @RecipeName = isnull(@RecipeName,''), @All = isnull(@All,0)
 
-	select r.RecipeId, r.StaffId, r.CuisineTypeId, r.RecipeName, r.RecipeStatus, "User" = concat(s.FirstName, ' ', s.LastName), r.Calories, r.DateDrafted, r.DatePublished, r.DateArchived, "Num Ingredients" = count(ri.IngredientId), "ListOrder" = 1
+	select r.RecipeId, r.StaffId, r.CuisineTypeId, r.RecipeName, r.RecipeStatus, "User" = concat(s.FirstName, ' ', s.LastName), r.Calories, r.Vegan ,r.DateDrafted, r.DatePublished, r.DateArchived, NumIngredients = count(ri.IngredientId), "ListOrder" = 1, r.RecipePicture
 	from Recipe r
 	join Staff s
 	on s.StaffId = r.StaffId
@@ -23,8 +23,8 @@ begin
 	where r.RecipeId = @RecipeId
 	or(@RecipeName <> '' and r.RecipeName like '%' + @RecipeName + '%')
 	or @All = 1
-	group by r.RecipeId, r.StaffId, r.CuisineTypeId, r.RecipeName, r.RecipeStatus, concat(s.FirstName, ' ', s.LastName), r.Calories, r.DateDrafted, r.DatePublished, r.DateArchived
-	union select 0, 0, 0, '', '', '', 0, null, null, null, 0, 0
+	group by r.RecipeId, r.StaffId, r.CuisineTypeId, r.RecipeName, r.RecipeStatus, concat(s.FirstName, ' ', s.LastName), r.Calories, r.Vegan, r.DateDrafted, r.DatePublished, r.DateArchived, r.RecipePicture
+	union select 0, 0, 0, '', '', '', 0, 0, null, null, null, 0, 0, ''
 	where @IncludeBlank = 1
 	order by ListOrder, r.RecipeStatus desc
 

@@ -11,7 +11,7 @@ public partial class RecipeSearch : ContentPage
 	}
     private void SearchRecipes()
     {
-        DataTable dt = Recipe.SearchForRecipes(RecipeNameTxt.Text);
+            DataTable dt = Recipe.SearchForRecipes(RecipeNameTxt.Text);
         RecipeLst.ItemsSource = dt.Rows;
     }
     private void SearchBtn_Clicked(object sender, EventArgs e)

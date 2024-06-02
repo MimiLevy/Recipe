@@ -65,6 +65,8 @@ create table dbo.Recipe(
         constraint u_Recipe_RecipeName unique,
     Calories int not null
         constraint ck_Recipe_Calories_must_be_greater_than_zero check(Calories > 0),
+	Vegan bit not null
+		constraint d_Recipe_Vegan default(0),
     DateDrafted datetime not null
         constraint ck_Recipe_DateDrafted_cannot_be_before_website_was_created_and_not_in_the_future check(DateDrafted between 01/01/22 and getdate()),
     DatePublished datetime null 
@@ -119,6 +121,9 @@ create table dbo.Meal(
     MealName varchar(50) not null 
         constraint ck_Meal_MealName_cannot_be_blank check(MealName <> '')
         constraint u_Meal_MealName unique,
+	MealDescription varchar(50) not null
+		constraint d_Meal_MealDescription default('Meal Description coming soon...')
+		constraint ck_Meal_MealDescription_cannot_be_blank check(MealDescription <> ''),
     DateDrafted date not null
         constraint d_Meal_DateDrafted default getdate()
         constraint ck_Meal_DateDrafted_cannot_be_before_website_was_published_and_not_in_the_future check(DateDrafted between '01/01/2022' and getdate()),
@@ -171,7 +176,15 @@ create table dbo.Cookbook(
         constraint d_Cookbook_DateDrafted default getdate()
         constraint ck_Cookbook_DateDrafted_cannot_be_before_website_was_created_and_not_in_the_future check(DateDrafted between '01/01/2022' and getdate()),
     CookbookActive bit not null,
-    CookbookPicture as concat('Cookbook', '-', replace(CookbookName, ' ', '-'), '.jpg')
+	CookBookSkillLevel int not null
+		constraint ck_Cookbook_CookbookSkill_must_be_greater_than_zero check(CookbookSkillLevel > 0)
+		constraint d_Cookbook_CookbookSkill default(1),
+    CookbookPicture as concat('Cookbook', '-', replace(CookbookName, ' ', '-'), '.jpg'),
+	CookBookSkillLevelDesc as case 
+						 when CookbookSkillLevel = 1 then 'beginner'
+					     when CookbookSkillLevel = 2 then 'intermediate'
+						 when CookbookSkillLevel = 3 then 'advanced'
+						 end persisted
 )
 go
 

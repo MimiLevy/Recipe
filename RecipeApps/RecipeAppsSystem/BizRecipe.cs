@@ -14,10 +14,13 @@ namespace RecipeAppsSystem
         private int _staffid;
         private int _cuisinetypeid;
         private string _recipename = "";
+        private string _user = "";
         private int _calories;
+        private int _vegan;
         private DateTime? _datedrafted;
         private DateTime? _datepublished;
         private DateTime? _datearchived;
+        private int _numingredients;
 
         // I'm not sure if I'm meant to include the computed columns.
         private string _recipestatus = "";
@@ -78,6 +81,19 @@ namespace RecipeAppsSystem
                 }
             }
         }
+
+        public string User
+        {
+            get { return _user; }
+            set
+            {
+                if(_user != value)
+                {
+                    _user = value;
+                    InvokePropertyChanged();
+                }
+            }
+        }
         public int Calories
         {
             get { return _calories; }
@@ -86,6 +102,18 @@ namespace RecipeAppsSystem
                 if (_calories != value)
                 {
                     _calories = value;
+                    InvokePropertyChanged();
+                }
+            }
+        }
+        public int Vegan
+        {
+            get { return _vegan; }
+            set
+            {
+                if (_vegan != value)
+                {
+                    _vegan = value;
                     InvokePropertyChanged();
                 }
             }
@@ -151,5 +179,17 @@ namespace RecipeAppsSystem
             }
         }
 
+        public int NumIngredients
+        {
+            get { return _numingredients; }
+            set
+            {
+                if(_numingredients != value)
+                {
+                    _numingredients = value;
+                    InvokePropertyChanged();
+                }
+            }
+        }
     }
 }

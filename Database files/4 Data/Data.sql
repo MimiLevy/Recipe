@@ -96,21 +96,21 @@ go
 
 ;
 with x as(
-   select FirstName = 'Michael', LastName = 'Kors', CuisineType = 'American', RecipeName = 'Chocolate Chip Cookies', Calories = 249, DateDrafted = '01/02/22', DatePublished = '01/04/22', DateArchived = '06/18/23'
-   union select 'John', 'Lewis', 'French', 'Apple Yogurt Smoothie', 431, '05/27/2022', null, null
-   union select 'Ted', 'Baker', 'English', 'Cheese Bread', 71, '02/12/2022', '02/25/2022', '04/29/2022'
-   union select 'Michael', 'Kors',  'American', 'Butter Muffins', 189, '04/07/2022', '05/05/2022', null
-   union select 'Anna', 'Klein', 'Jewish', 'Chicken cooked in wine', 327, '03/01/2022', '03/04/2022', null
-   union select 'Anna', 'Klein', 'Jewish', 'Potato Kugel', 244, '04/16/2022', null, '04/22/2022'
-   union select 'Michael', 'Kors',  'American', 'Easy homemade Ice Cream', 160, '03/22/2022', '04/10/2022', null
-   union select 'Michael', 'Kors',  'American', 'Tasty topped BBQ Burgers', 453, '01/05/2022', '01/15/2022', null
-   union select 'John', 'Lewis',  'Japan', 'Cold Orange Juice Drink', 110, '05/22/2022', '05/26/2022', null
-   union select 'John', 'Lewis', 'French', 'Teriyaki Schnitzle', 216, '05/26/2022', null, '06/15/2022'
-   union select 'John', 'Lewis',  'Japan', 'Baked rice', 362, '01/27/2022', '02/27/2022', '03/27/2022'
-   union select 'Ted', 'Baker', 'English', 'Vegetable Soup', 67, '06/20/2022', null, null
+   select FirstName = 'Michael', LastName = 'Kors', CuisineType = 'American', RecipeName = 'Chocolate Chip Cookies', Calories = 249, Vegan = 0, DateDrafted = '01/02/22', DatePublished = '01/04/22', DateArchived = '06/18/23'
+   union select 'John', 'Lewis', 'French', 'Apple Yogurt Smoothie', 431, 1, '05/27/2022', null, null
+   union select 'Ted', 'Baker', 'English', 'Cheese Bread', 71, 0,'02/12/2022', '02/25/2022', '04/29/2022'
+   union select 'Michael', 'Kors',  'American', 'Butter Muffins', 189, 0, '04/07/2022', '05/05/2022', null
+   union select 'Anna', 'Klein', 'Jewish', 'Chicken cooked in wine', 327, 0, '03/01/2022', '03/04/2022', null
+   union select 'Anna', 'Klein', 'Jewish', 'Potato Kugel', 244, 1, '04/16/2022', null, '04/22/2022'
+   union select 'Michael', 'Kors',  'American', 'Easy homemade Ice Cream', 160, 0, '03/22/2022', '04/10/2022', null
+   union select 'Michael', 'Kors',  'American', 'Tasty topped BBQ Burgers', 453, 0, '01/05/2022', '01/15/2022', null
+   union select 'John', 'Lewis',  'Japan', 'Cold Orange Juice Drink', 110, 1, '05/22/2022', '05/26/2022', null
+   union select 'John', 'Lewis', 'French', 'Teriyaki Schnitzle', 216, 0, '05/26/2022', null, '06/15/2022'
+   union select 'John', 'Lewis',  'Japan', 'Baked rice', 362, 1, '01/27/2022', '02/27/2022', '03/27/2022'
+   union select 'Ted', 'Baker', 'English', 'Vegetable Soup', 67, 1, '06/20/2022', null, null
 )
-insert Recipe(StaffId,CuisineTypeId,RecipeName,Calories,DateDrafted,DatePublished,DateArchived)
-select s.StaffId, ct.CuisineTypeId, x.RecipeName, x.Calories, x.DateDrafted, x.DatePublished, x.DateArchived
+insert Recipe(StaffId,CuisineTypeId,RecipeName,Calories, Vegan, DateDrafted,DatePublished,DateArchived)
+select s.StaffId, ct.CuisineTypeId, x.RecipeName, x.Calories, x.Vegan, DateDrafted, x.DatePublished, x.DateArchived
 from x
 join Staff s 
 on x.FirstName = s.FirstName
@@ -270,13 +270,13 @@ go
 
 ;
 with x as(
-   select UserName = '1234J.L.', MealName = 'Breakfast bash', MealActive = 1
-   union select 'M.K.LoveFood', 'BBQ Supper', 1
-   union select 'A.K.210', 'Shabbes meal', 0
-   union select 'M.K.LoveFood', 'Good Easy Supper', 1
+   select UserName = '1234J.L.', MealName = 'Breakfast bash', MealDescription = 'A hearty, celebratory breakfast meal', MealActive = 1
+   union select 'M.K.LoveFood', 'BBQ Supper', 'Delicious and festive barbecue meal', 1
+   union select 'A.K.210', 'Shabbes meal', 'The traditional and joyous Shabbes meal', 0
+   union select 'M.K.LoveFood', 'Good Easy Supper', 'Easy and satisfying supper choice', 1
 )
-insert Meal(StaffId,MealName,MealActive)
-select s.StaffId, x.MealName, x.MealActive
+insert Meal(StaffId,MealName, MealDescription,MealActive)
+select s.StaffId, x.MealName, x.MealDescription, x.MealActive
 from x 
 join Staff s 
 on x.UserName = s.UserName
@@ -339,13 +339,13 @@ go
 
 ;
 with x as(
-   select UserName = '1234J.L.', CookbookName = 'Treats for two', Price = 30, CookbookActive = 1
-   union select '1980Ted', 'Good Food', 36, 0
-   union select 'A.K.210', 'Delicius Shabbes Food', 40, 1
-   union select '1980Ted', 'Yummmmm', 25, 0
+   select UserName = '1234J.L.', CookbookName = 'Treats for two', Price = 30, CookbookActive = 1, CookbookSkillLevel = 3
+   union select '1980Ted', 'Good Food', 36, 0, 2
+   union select 'A.K.210', 'Delicius Shabbes Food', 40, 1, 2
+   union select '1980Ted', 'Yummmmm', 25, 0, 1
 )
-insert Cookbook(StaffId,CookbookName,Price,CookbookActive)
-select s.StaffId, x.CookbookName, x.Price, x.CookbookActive 
+insert Cookbook(StaffId,CookbookName,Price,CookbookActive, CookbookSkillLevel)
+select s.StaffId, x.CookbookName, x.Price, x.CookbookActive , x.CookbookSkillLevel
 from x 
 join Staff s
 on x.UserName = s.UserName
