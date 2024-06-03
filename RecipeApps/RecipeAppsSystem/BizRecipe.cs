@@ -22,14 +22,14 @@ namespace RecipeAppsSystem
         private DateTime? _datearchived;
         private int _numingredients;
 
-        // I'm not sure if I'm meant to include the computed columns.
         private string _recipestatus = "";
         private string _recipepicture = "";
 
-        public List<BizRecipe> Search(string recipenameval)
+        public List<BizRecipe> Search(string recipenameval, string cookbooknameval = "")
         {
             SqlCommand cmd = SQLUtility.GetSqlCommand(this.GetSprocName);
-            SQLUtility.SetParamValue(cmd, "RecipeName", recipenameval);
+            SQLUtility.SetParamValue(cmd, "@RecipeName", recipenameval);
+            SQLUtility.SetParamValue(cmd, "@CookbookName", cookbooknameval);
             DataTable dt = SQLUtility.GetDataTable(cmd);
             return this.GetListFromDataTable(dt);
         }
