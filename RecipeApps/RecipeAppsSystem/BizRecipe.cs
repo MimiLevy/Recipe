@@ -21,9 +21,10 @@ namespace RecipeAppsSystem
         private DateTime? _datepublished;
         private DateTime? _datearchived;
         private int _numingredients;
-
         private string _recipestatus = "";
         private string _recipepicture = "";
+        private List<bizRecipeIngredient> _lstrecipeingredient;
+        private List<bizRecipeStep> _lstrecipestep;
 
         public List<BizRecipe> Search(string recipenameval, string cookbooknameval = "")
         {
@@ -32,6 +33,30 @@ namespace RecipeAppsSystem
             SQLUtility.SetParamValue(cmd, "@CookbookName", cookbooknameval);
             DataTable dt = SQLUtility.GetDataTable(cmd);
             return this.GetListFromDataTable(dt);
+        }
+
+        public List<bizRecipeIngredient> RecipeIngredientList
+        {
+            get
+            {
+                if(_lstrecipeingredient == null)
+                {
+                    _lstrecipeingredient = new bizRecipeIngredient().LoadByRecipeId(this.RecipeId);
+                }
+                return _lstrecipeingredient;
+            }
+        }
+
+        public List<bizRecipeStep> RecipeStepList
+        {
+            get
+            {
+                if (_lstrecipestep == null)
+                {
+                    _lstrecipestep = new bizRecipeStep().LoadByRecipeId(this.RecipeId);
+                }
+                return _lstrecipestep;
+            }
         }
         public int RecipeId
         {

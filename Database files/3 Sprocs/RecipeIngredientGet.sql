@@ -13,8 +13,12 @@ begin
 
   select @All = isnull(@All,0), @RecipeId = isnull(@RecipeId,0)
  
-  select ri.RecipeIngredientId, ri.RecipeId, ri.Amount, ri.IngredientId, ri.MeasurementTypeId, ri.Sequence
+  select ri.RecipeIngredientId, ri.RecipeId, ri.Amount, ri.IngredientId, ri.MeasurementTypeId, i.IngredientName, m.MeasurementTypeDesc, ri.Sequence
   from RecipeIngredient ri
+  join Ingredient i 
+  on i.IngredientId = ri.IngredientId
+  join MeasurementType m
+  on m.MeasurementTypeId = ri.MeasurementTypeId
   where ri.RecipeIngredientId = @RecipeIngredientId
   or ri.RecipeId = @RecipeId
   or @All = 1
@@ -26,4 +30,4 @@ end
 go
 
 --exec RecipeIngredientGet @All = 1
-
+--exec RecipeIngredientGet @recipeid = 1

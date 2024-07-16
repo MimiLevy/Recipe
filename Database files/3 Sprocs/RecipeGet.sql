@@ -15,7 +15,7 @@ begin
 
 	select @RecipeId = isnull(@RecipeId,0), @RecipeName = isnull(@RecipeName,''), @CookbookName = isnull(@CookbookName,''), @All = isnull(@All,0)
 
-	select r.RecipeId, r.StaffId, r.CuisineTypeId, r.RecipeName, r.RecipeStatus, "User" = concat(s.FirstName, ' ', s.LastName), r.Calories, r.Vegan ,r.DateDrafted, r.DatePublished, r.DateArchived, NumIngredients = count(ri.IngredientId), "ListOrder" = 1, r.RecipePicture
+	select r.RecipeId, r.StaffId, r.CuisineTypeId, r.RecipeName, r.RecipeStatus, "User" = concat(s.FirstName, ' ', s.LastName), r.Calories, r.Vegan ,r.DateDrafted, r.DatePublished, r.DateArchived, NumIngredients = count(ri.IngredientId), ,"ListOrder" = 1, r.RecipePicture
 	from Recipe r
 	join Staff s
 	on s.StaffId = r.StaffId
