@@ -4,7 +4,8 @@ go
 create or alter procedure dbo.CuisineTypeGet(
 	@CuisineTypeId int = 0,
 	@CuisineTypeDesc varchar(30) = '',
-	@All bit = 0
+	@All bit = 0,
+	@IncludeBlank bit = 0
 )
 as
 begin
@@ -17,6 +18,8 @@ begin
 	where c.CuisineTypeId = @CuisineTypeId
 	or (@CuisineTypeDesc <> '' and c.CuisineTypeDesc like '%' + @CuisineTypeDesc + '%')
 	or @All = 1
+	union select 0, ''
+	where @IncludeBlank = 1
 
 	return @return
 end 

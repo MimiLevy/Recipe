@@ -26,11 +26,12 @@ namespace RecipeAppsSystem
         private List<bizRecipeIngredient> _lstrecipeingredient;
         private List<bizRecipeStep> _lstrecipestep;
 
-        public List<BizRecipe> Search(string recipenameval, string cookbooknameval = "")
+        public List<BizRecipe> Search(string recipenameval, string cookbooknameval = "", string cuisinetypeval = "")
         {
             SqlCommand cmd = SQLUtility.GetSqlCommand(this.GetSprocName);
             SQLUtility.SetParamValue(cmd, "@RecipeName", recipenameval);
             SQLUtility.SetParamValue(cmd, "@CookbookName", cookbooknameval);
+            SQLUtility.SetParamValue(cmd, "@CuisineTypeDesc", cuisinetypeval);
             DataTable dt = SQLUtility.GetDataTable(cmd);
             return this.GetListFromDataTable(dt);
         }

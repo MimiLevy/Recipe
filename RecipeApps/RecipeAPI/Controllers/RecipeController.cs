@@ -26,7 +26,13 @@ namespace RecipeAPI.Controllers
 
         public List<BizRecipe> GetByCookbook(string cookbookname)
         {
-            return new BizRecipe().Search("", cookbookname);
+            return new BizRecipe().Search("", cookbookname, "");
+        }
+
+        [HttpGet("getbycuisinetype/{cuisinetypedesc}")]
+        public List<BizRecipe> GetByCuisineType(string cuisinetypedesc)
+        {
+            return new BizRecipe().Search("", "", cuisinetypedesc);
         }
     }
 }
